@@ -4,14 +4,13 @@ export function useSnackbar(timeout: number) {
     const [ isOpen, setOpen ] = useState(false);
     const [ message, setMessage ] = useState("");
 
-    if (timeout > 0)
-        useEffect(() => {
-            if (isOpen) {
-                setTimeout(() => {
-                    setOpen(false);
-                }, timeout);
-            }
-        }, [isOpen]);
+    useEffect(() => {
+        if (timeout > 0 && isOpen) {
+            setTimeout(() => {
+                setOpen(false);
+            }, timeout);
+        }
+    }, [isOpen, timeout]);
 
     const openSnackbar = (message: string) => {
         setMessage(message);
