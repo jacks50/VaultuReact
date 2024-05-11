@@ -39,6 +39,9 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           static_site_generator: next
+      - run: |
+          ls -lah 
+          cat next.config.js
       - name: Install dependencies
         run: npm ci
       - name: Build with Next.js
