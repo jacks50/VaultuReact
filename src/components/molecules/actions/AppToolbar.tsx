@@ -1,7 +1,7 @@
-import { SaveOutlined, PasswordOutlined, Logout, MoreOutlined, MoreVertOutlined } from "@mui/icons-material";
-import { AppBar, Toolbar, Typography, Box, IconButton, styled, InputBase, alpha, Menu, MenuItem } from "@mui/material";
+import { Logout, MoreVertOutlined, PasswordOutlined, SaveOutlined } from "@mui/icons-material";
+import { AppBar, Box, IconButton, Menu, MenuItem, Toolbar, Typography, styled } from "@mui/material";
+import React from "react";
 import AppSearch from "./AppSearch";
-import React, { useState } from "react";
 
 interface AppToolbarProps {
     saveListHandler: () => void,

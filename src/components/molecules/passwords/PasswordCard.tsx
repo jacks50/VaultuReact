@@ -1,8 +1,8 @@
-import { DeleteRounded, EnhancedEncryptionRounded, OpenInNewRounded, PersonAddAlt1Rounded } from "@mui/icons-material";
+import { PasswordItem } from "@/interface/password/PasswordInterface";
+import { DeleteRounded, EnhancedEncryptionRounded, PersonAddAlt1Rounded } from "@mui/icons-material";
 import { Card, CardActionArea, CardActions, CardContent, Grid, IconButton, Snackbar, Typography } from "@mui/material";
 import { useState } from "react";
 import { PasswordDialog } from "./PasswordDialog";
-import { PasswordItem } from "@/interface/password/PasswordInterface";
 
 export function PasswordCard(props: {
     handleItemSave: (values: PasswordItem) => void, 

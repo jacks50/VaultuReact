@@ -1,5 +1,5 @@
-import { InputBase, alpha, styled } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import { InputBase, alpha, styled } from "@mui/material";
 
 
 interface AppSearchProps {

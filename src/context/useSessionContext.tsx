@@ -1,4 +1,5 @@
 import { PasswordItem } from "@/interface/password/PasswordInterface";
+import { lib } from "crypto-js";
 import { createContext } from "react";
 
 export interface SessionContextType {
@@ -9,8 +10,8 @@ export interface SessionContextType {
 export interface SessionContextData {
     sessionPassword: string | null,
     sessionSalt: string | null,
-    sessionIV: CryptoJS.lib.WordArray | null,
-    sessionKey: CryptoJS.lib.WordArray | null,
+    sessionIV: lib.WordArray | null,
+    sessionKey: lib.WordArray | null,
     passwordList: Map<string, PasswordItem> | null,
     fileName: string | null,
 }

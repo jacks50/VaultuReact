@@ -1,5 +1,5 @@
 import { CloseOutlined } from "@mui/icons-material";
-import { Button, IconButton, Snackbar, SnackbarContent } from "@mui/material";
+import { Button, IconButton, Snackbar } from "@mui/material";
 import React from "react";
 
 interface DownloadSnackbarProps {

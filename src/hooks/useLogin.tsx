@@ -1,5 +1,5 @@
 import { CryptLoginData, UseLogin } from "@/interface/login/LoginInterface";
-import { getIV, getSalt, generateKey, decryptFile } from "@/utils/encryption/encryptDecrypt";
+import { decryptFile, generateKey, getIV, getSalt } from "@/utils/encryption/encryptDecrypt";
 import { useState } from "react";
 
 export function useLogin(): UseLogin {

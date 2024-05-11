@@ -1,6 +1,6 @@
 import { getRandomChar, shuffleString } from "@/utils/encryption/passwordUtil";
 import { AbcOutlined, EmojiSymbolsOutlined, NumbersOutlined } from "@mui/icons-material";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, Slider, TextField } from "@mui/material";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Slider, TextField } from "@mui/material";
 import { useState } from "react";
 
 const LOWERCASE_CHAR = "abcdefghijklmnopqrstuvwxyz";
