@@ -1,21 +1,19 @@
-import { PasswordCard, PasswordItem } from "../../molecules/passwords/PasswordCard";
-import React, { JSX, useContext, useState } from "react";
-import { Box, Fab, Grid } from "@mui/material";
-import { AddOutlined } from "@mui/icons-material";
-import { encryptFile } from "@/utils/encryption/encryptDecrypt";
-import { PasswordDialog } from "../../molecules/passwords/PasswordDialog";
-import { v4 as uuid } from "uuid"
-import AppToolbar from "@/components/molecules/actions/AppToolbar";
-import PasswordGenerator from "./PasswordGenerator";
-import { useSnackbar } from "@/hooks/useSnackbar";
 import DownloadSnackbar from "@/components/atoms/snackbars/DownloadSnackbar";
+import AppToolbar, { Offset } from "@/components/molecules/actions/AppToolbar";
 import { SessionContext, defaultSessionData } from "@/context/useSessionContext";
+import { useSnackbar } from "@/hooks/useSnackbar";
+import { PasswordItem, PasswordListProps } from "@/interface/password/PasswordInterface";
+import { encryptFile } from "@/utils/encryption/encryptDecrypt";
+import { AddOutlined } from "@mui/icons-material";
+import { Box, Fab, Grid, Typography } from "@mui/material";
+import { JSX, useContext, useState } from "react";
+import { v4 as uuid } from "uuid";
+import { PasswordCard } from "../../molecules/passwords/PasswordCard";
+import { PasswordDialog } from "../../molecules/passwords/PasswordDialog";
+import PasswordGenerator from "./PasswordGenerator";
+import { FILE_DOWNLOAD } from "@/utils/constants/constants";
 
-interface PasswordProps {
-    setLoading: (v: boolean) => void
-}
-
-function PasswordList({ setLoading }: PasswordProps) {
+function PasswordList({}: PasswordListProps) {
     const [ search, setSearch ] = useState("");
     const [ openNewPassword, setOpenNewPassword ] = useState(false);
     const [ openGenerator, setOpenGenerator ] = useState(false);
@@ -53,7 +51,9 @@ function PasswordList({ setLoading }: PasswordProps) {
         const passwordItems: JSX.Element[] = [];
 
         sessionContextData?.passwordList?.forEach((passwordItem, passwordUID) => {
-            if (!search || passwordItem.passwordName.includes(search) || passwordItem.passwordURL.includes(search))
+            if (!search || 
+                passwordItem.passwordName.toLowerCase().includes(search.toLowerCase()) || 
+                passwordItem.passwordURL.toLowerCase().includes(search.toLowerCase()))
                 passwordItems.push(
                     <PasswordCard
                         key={ passwordItem.passwordUID }
@@ -69,15 +69,15 @@ function PasswordList({ setLoading }: PasswordProps) {
     const handleListSave = () => {
         if (sessionContextData != null) {
             encryptFile(
-                JSON.stringify(Object.fromEntries(sessionContextData.passwordList)),
+                JSON.stringify(Object.fromEntries(sessionContextData?.passwordList!!)),
                 sessionContextData.sessionKey!,
                 sessionContextData.sessionIV!,
                 sessionContextData.sessionSalt!)
                 .then((result) => {
-                    openSnackbar("data:text/plain;charset=utf-8," + encodeURIComponent(result));
+                    openSnackbar(FILE_DOWNLOAD + encodeURIComponent(result));
                 })
                 .catch((error) => {
-                    console.log(error);
+                    console.error(error);
                 });
         }
     }
@@ -85,8 +85,6 @@ function PasswordList({ setLoading }: PasswordProps) {
     const handleLogout = () => {
         setSessionContextData(defaultSessionData);
     }
-
-    //setLoading(false);
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -96,13 +94,24 @@ function PasswordList({ setLoading }: PasswordProps) {
                 searchHandler={ setSearch }
                 setOpenGenerator={ setOpenGenerator }/>
 
-            <Grid 
-                container 
-                padding={{ xs: 2, md: 4 }}
-                rowSpacing={{ xs: 3, md: 2}}
-                columnSpacing={{ xs: 0, md: 2 }}>
-                { getPasswordCards() }
-            </Grid>
+            <Offset/>
+
+            { 
+                sessionContextData?.passwordList?.size == 0 ?
+                <Typography 
+                    variant="h5"
+                    align="center">
+                    No passwords yet : add your first password by clicking on the + button on the bottom right
+                </Typography> 
+                :                
+                <Grid 
+                    container 
+                    padding={{ xs: 2, md: 4 }}
+                    rowSpacing={{ xs: 3, md: 2}}
+                    columnSpacing={{ xs: 0, md: 2 }}>
+                    { getPasswordCards() }
+                </Grid>
+            }
 
             <PasswordDialog
                 item={ { passwordUID: uuid() } as PasswordItem }
@@ -117,11 +126,11 @@ function PasswordList({ setLoading }: PasswordProps) {
             <DownloadSnackbar
                 isOpen={ isOpen }
                 downloadLink={ message }
-                downloadName="File updated"
+                downloadName={ sessionContextData?.fileName || "Updated file" }
                 closeHandler={ closeSnackbar }/>
 
             <Fab 
-                color="primary" 
+                color="secondary" 
                 aria-label="add" 
                 sx={{ position: 'fixed', bottom: 24, right: 24 }}
                 onClick={ () => setOpenNewPassword(true) }>

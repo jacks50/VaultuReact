@@ -1,25 +1,23 @@
-import { VisibilityOutlined, VisibilityOffOutlined } from "@mui/icons-material";
-import { IconButton, InputAdornment, OutlinedInput, styled } from "@mui/material";
-import { useState } from "react";
+import { OutlinedInput, styled } from "@mui/material";
 
 interface TextInputFieldProps {
     text: string,
     setText: (value: string) => void,
-    label: string,
+    placeholder: string,
 }
 
 const TextInputFieldStyle = styled(OutlinedInput)({
     
 });
 
-export default function TextInputFieldField({ text, setText, label }: TextInputFieldProps) {
+export default function TextInputFieldField({ text, setText, placeholder }: TextInputFieldProps) {
     return (
         <TextInputFieldStyle
-            label={ label }
+            placeholder={ placeholder }
             type={ "text" }
             value={ text }
-            sx={{ width: "100%" }}
-            onChange={(e) => setText(e.target.value)}
+            fullWidth
+            onChange={ (e) => setText(e.target.value) }
             size="small"
         />
     )

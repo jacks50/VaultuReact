@@ -1,8 +1,6 @@
-import { useSnackbar } from "@/hooks/useSnackbar";
 import { CloseOutlined } from "@mui/icons-material";
-import { Alert, Button, IconButton, Snackbar } from "@mui/material";
+import { Button, IconButton, Snackbar, SnackbarContent } from "@mui/material";
 import React from "react";
-import { useState } from "react";
 
 interface DownloadSnackbarProps {
     isOpen: boolean,
@@ -17,7 +15,6 @@ export default function DownloadSnackbar({
     downloadName,
     closeHandler 
 }: DownloadSnackbarProps) {
-
     const snackbarActions = (
         <React.Fragment>
             <Button 
@@ -41,9 +38,17 @@ export default function DownloadSnackbar({
         <Snackbar
             open={ isOpen }
             onClose={ closeHandler }
-            message={ downloadName }
             anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            action={ snackbarActions }>
+            message={ downloadName }
+            action={ snackbarActions }
+            ContentProps={{
+                sx: {
+                    border: '1px solid white',
+                    bgcolor: '#000000',
+                    color: 'white',
+                }
+            }}
+            >
         </Snackbar>
     );
 }

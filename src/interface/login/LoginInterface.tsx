@@ -1,3 +1,11 @@
+export interface LoginPageProps {
+    
+}
+
+export interface LoginProps {
+    handleNewAccountCreate: () => void,
+}
+
 export interface UseLogin {
     uploadFile: (fileToUpload: File) => void,
     uploadedFile?: File,

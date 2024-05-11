@@ -1,3 +1,11 @@
+export interface PasswordPageProps {
+
+}
+
+export interface PasswordListProps {
+
+}
+
 export interface PasswordItem {
     passwordID: number,
     passwordName: string,

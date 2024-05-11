@@ -1,9 +1,5 @@
 import PasswordList from "@/components/organisms/password/PasswordList";
-
-interface PasswordPageProps {
-    setLoading: (v: boolean) => void,
-}
-
+import { PasswordPageProps } from "@/interface/password/PasswordInterface";
 
 function PasswordListPage(props: PasswordPageProps) {
     return (

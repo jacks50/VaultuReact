@@ -11,7 +11,8 @@ export interface SessionContextData {
     sessionSalt: string | null,
     sessionIV: CryptoJS.lib.WordArray | null,
     sessionKey: CryptoJS.lib.WordArray | null,
-    passwordList: Map<string, PasswordItem>,
+    passwordList: Map<string, PasswordItem> | null,
+    fileName: string | null,
 }
 
 export const defaultSessionData: SessionContextData = {
@@ -19,7 +20,8 @@ export const defaultSessionData: SessionContextData = {
   sessionSalt: null,
   sessionIV: null,
   sessionKey: null,
-  passwordList: new Map(),
+  passwordList: null,
+  fileName: null,
 }
 
 export const SessionContext = createContext<SessionContextType>({

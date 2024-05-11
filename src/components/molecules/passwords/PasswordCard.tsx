@@ -1,18 +1,8 @@
-import { DeleteOutlined, DeleteRounded, EnhancedEncryptionRounded, KeyOutlined, ManageAccountsOutlined, PersonAddAlt1, PersonAddAlt1Outlined, PersonAddAlt1Rounded} from "@mui/icons-material";
-import { Button, Card, CardActions, CardContent, Grid, IconButton, Snackbar, Typography } from "@mui/material";
+import { DeleteRounded, EnhancedEncryptionRounded, OpenInNewRounded, PersonAddAlt1Rounded } from "@mui/icons-material";
+import { Card, CardActionArea, CardActions, CardContent, Grid, IconButton, Snackbar, Typography } from "@mui/material";
 import { useState } from "react";
 import { PasswordDialog } from "./PasswordDialog";
-
-// TODO : create interfaces folder and put it in
-export interface PasswordItem {
-    passwordID: number,
-    passwordName: string,
-    passwordUsername: string,
-    passwordURL: string,
-    passwordValue: string,
-    loginId: number,
-    passwordUID: string,
-}
+import { PasswordItem } from "@/interface/password/PasswordInterface";
 
 export function PasswordCard(props: {
     handleItemSave: (values: PasswordItem) => void, 
@@ -28,49 +18,48 @@ export function PasswordCard(props: {
         setOpen(true);
     }
 
-    const handleCopyUsername = async (passwordUsername: string) => {
+    const handleCopy = async (label: string, value: string) => {
         if (navigator.clipboard) {
-            await navigator.clipboard.writeText(passwordUsername);
-            setSnackbarMsg("Username copied !");
+            await navigator.clipboard.writeText(value);
+            setSnackbarMsg(`"${label} copied !"`);
+        } else {
+            setSnackbarMsg("No clipboard found to copy text");
         }
     }
 
-    const handleCopyPassword = async (passwordValue: string) => {
-        if (navigator.clipboard) {
-            await navigator.clipboard.writeText(passwordValue);
-            setSnackbarMsg("Password copied !");
-        }
-    }
-
+    // TODO : Maybe not the best since each card has its own dialog, we should reuse that
+    // TODO : Also add confirmation dialogs
     return (
         <Grid item xs={12} sm={6} md={3} key={item.passwordUID}>
             <Card key={ item.passwordUID }>
-                <CardContent>
-                    <Typography variant="h5" component="div">
-                        { item.passwordName }
-                    </Typography>
-                </CardContent>
+                <CardActionArea onClick={ handleOpen }>
+                    <CardContent>
+                        <Typography variant="h5" component="div">
+                            { item.passwordName }
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
 
                 <CardActions disableSpacing>
                     <IconButton 
+                        sx={{ ml: 'auto' }}
                         aria-label="Copy username"
-                        onClick={ () => handleCopyUsername(item.passwordUsername) }>
+                        onClick={ () => handleCopy('Username', item.passwordUsername) }>
                         <PersonAddAlt1Rounded/>
                     </IconButton>
                     
                     <IconButton 
                         aria-label="Copy password"
-                        onClick={ () => handleCopyPassword(item.passwordValue) }>
+                        onClick={ () => handleCopy('Password', item.passwordValue) }>
                         <EnhancedEncryptionRounded/>
                     </IconButton>
                     
                     <IconButton 
                         aria-label="Delete password"
+                        color="secondary"
                         onClick={ () => props.handleItemDelete(item.passwordUID) }>
                         <DeleteRounded/>
                     </IconButton>
-
-                    <Button sx={{ ml: 'auto' }} onClick={handleOpen}>Open</Button>
                 </CardActions>
             </Card>
 

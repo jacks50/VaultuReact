@@ -1,31 +1,34 @@
+import NewAccount from "@/components/organisms/account/NewAccount";
 import Login from "@/components/organisms/login/Login";
+import { LoginPageProps } from "@/interface/login/LoginInterface";
 import { Box, Typography } from "@mui/material";
-
-interface LoginPageProps {
-    setLoading: (v: boolean) => void,
-}
+import { useState } from "react";
 
 function LoginPage(props: LoginPageProps) {
+    const [ creatingNewAccount, setCreatingNewAccount ] = useState(false);
+
     return (
         <Box sx={{
-            m: 12,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            justifyContent: 'center',
             gap: 4,
-            backgroundColor: "#fff",
             flexGrow: 1,
-            borderRadius: 2,
+            height: '100%',
         }}>
             <img src="/logo.svg" width={ 140 } />
 
             <Typography 
-                component="h1" 
-                variant="h2">
+                variant="h1">
                 VaultuReact
             </Typography>
-
-            <Login { ...props } />
+            
+            { 
+                creatingNewAccount ?
+                <NewAccount handleNewAccountCancel={ () => setCreatingNewAccount(false) } /> : 
+                <Login handleNewAccountCreate={ () => setCreatingNewAccount(true) }/>
+            }
         </Box>
     );
 }

@@ -1,11 +1,20 @@
 import { enc, algo, mode, pad, lib, AES, PBKDF2 } from "crypto-js";
+import { v4 as uuid } from "uuid";
 
 export const getSalt = (fileContent: string) => {
     return fileContent.slice(0, 16);
 }
 
+export const generateSalt = () => {
+   return uuid().replaceAll('-', '').substring(0, 16);
+}
+
 export const getIV = (fileContent: string) => {
     return enc.Utf8.parse(fileContent.slice(16, 32));
+}
+
+export const generateIV = () => {
+    return enc.Utf8.parse(uuid().replaceAll('-', '').substring(0, 16));
 }
 
 export const generateKey = (password: string, salt: string) => {

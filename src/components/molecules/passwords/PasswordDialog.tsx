@@ -1,7 +1,8 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, OutlinedInput, TextField } from "@mui/material";
-import { PasswordItem } from "./PasswordCard";
-import { useState } from "react";
+import PasswordField from "@/components/atoms/fields/PasswordField";
 import TextInputField from "@/components/atoms/fields/TextInputField";
+import { PasswordItem } from "@/interface/password/PasswordInterface";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { useState } from "react";
 
 export function PasswordDialog(props: {
     item: PasswordItem, 
@@ -65,7 +66,7 @@ export function PasswordDialog(props: {
     }
 
     return (
-        <Dialog 
+        <Dialog
             open={ open } 
             onClose={ handleClose }>
             <DialogTitle>
@@ -73,34 +74,33 @@ export function PasswordDialog(props: {
             </DialogTitle>
 
             <DialogContent>
-                <OutlinedInput 
-                    margin="dense" 
-                    fullWidth 
-                    label="Name"
-                    value={ name }
-                    onChange={ (e) => handleFieldChange("name", e.target.value) }/>
+                <Box sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: 2,
+                }}>
+                    <TextInputField
+                        text={ name }
+                        placeholder="Name"
+                        setText={ (value) => handleFieldChange("name", value) }/>
+                    
+                    <TextInputField
+                        text={ url }
+                        placeholder="URL"
+                        setText={ (value) => handleFieldChange("url", value) }/>
 
-                <OutlinedInput 
-                    margin="dense" 
-                    fullWidth 
-                    label="Username"
-                    value={ username }
-                    onChange={ (e) => handleFieldChange("username", e.target.value) }/>
-                    
-                <OutlinedInput 
-                    margin="dense" 
-                    fullWidth 
-                    label="Password"
-                    type="password"
-                    value={ password }
-                    onChange={ (e) => handleFieldChange("password", e.target.value) }/>
-                    
-                <OutlinedInput 
-                    margin="dense" 
-                    fullWidth 
-                    label="URL"
-                    value={ url }
-                    onChange={ (e) => handleFieldChange("url", e.target.value) }/>
+                    <TextInputField
+                        text={ username }
+                        placeholder="Username"
+                        setText={ (value) => handleFieldChange("username", value) }/>
+
+                    <PasswordField
+                        placeholder="Password"
+                        password={ password }
+                        setPassword={ (value) => handleFieldChange("password", value) }/>
+                </Box>
             </DialogContent>
 
             <DialogActions>

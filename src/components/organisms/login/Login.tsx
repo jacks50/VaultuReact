@@ -1,21 +1,18 @@
 'use client'
 
-import { ChangeEvent, useContext, useState } from "react";
-import FileInputButton from "../../atoms/buttons/FileInputButton";
-import ConfirmButton from "../../atoms/buttons/ConfirmButton";
-import PasswordField from "../../atoms/fields/PasswordField";
 import ErrorSnackbar from "@/components/atoms/snackbars/ErrorSnackbar";
-import { Box } from "@mui/material";
-import { useSnackbar } from "@/hooks/useSnackbar";
 import { SessionContext } from "@/context/useSessionContext";
-import { CryptLoginData } from "@/interface/login/LoginInterface";
 import { useLogin } from "@/hooks/useLogin";
+import { useSnackbar } from "@/hooks/useSnackbar";
+import { CryptLoginData, LoginProps } from "@/interface/login/LoginInterface";
+import { Box, LinearProgress } from "@mui/material";
+import { ChangeEvent, useContext, useState } from "react";
+import ConfirmButton from "../../atoms/buttons/ConfirmButton";
+import FileInputButton from "../../atoms/buttons/FileInputButton";
+import PasswordField from "../../atoms/fields/PasswordField";
 
-interface LoginProps {
-    setLoading: (v: boolean) => void
-}
-
-function Login({ setLoading }: LoginProps) {
+function Login({ handleNewAccountCreate }: LoginProps) {
+    const [ isLoading, setLoading ] = useState(false);
     const [ password, setPassword ] = useState("");
 
     const { 
@@ -37,7 +34,7 @@ function Login({ setLoading }: LoginProps) {
 
     const handleLogin = () => {
         setLoading(true);
-
+        // TODO : see where the click handler blocks the thread - maybe use the start login logics here
         startLogin(
             password,
             (result: CryptLoginData) => {
@@ -51,6 +48,7 @@ function Login({ setLoading }: LoginProps) {
                     sessionIV: result.iv,
                     sessionKey: result.key,
                     passwordList: new Map(Object.entries(jsonMap)),
+                    fileName: uploadedFile && uploadedFile.name || null,
                 });
             },
             (err: any) => {
@@ -78,6 +76,7 @@ function Login({ setLoading }: LoginProps) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center', 
+            gap: 2,
             }}>
 
             <FileInputButton
@@ -85,6 +84,7 @@ function Login({ setLoading }: LoginProps) {
                 selectedFile={ uploadedFile } />
 
             <PasswordField
+                placeholder="Password"
                 password={ password }
                 setPassword={ setPassword }/>
 
@@ -93,6 +93,17 @@ function Login({ setLoading }: LoginProps) {
                 disabled={ !(uploadedFile && password) }>
                 Log in
             </ConfirmButton>
+
+            <ConfirmButton
+                onClick={ handleNewAccountCreate }
+                color="success">
+                Create new account
+            </ConfirmButton>
+        
+            { isLoading && <LinearProgress 
+                color="secondary" 
+                style={{ width: '100%' }}
+                 /> }
 
             <ErrorSnackbar 
                 isOpen={ isOpen }

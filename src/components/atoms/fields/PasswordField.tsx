@@ -3,6 +3,7 @@ import { IconButton, InputAdornment, OutlinedInput, styled } from "@mui/material
 import { useState } from "react";
 
 interface PasswordFieldProps {
+    placeholder: string,
     password: string,
     setPassword: (value: string) => void,
 }
@@ -11,23 +12,23 @@ const PasswordFieldStyle = styled(OutlinedInput)({
     
 });
 
-export default function PasswordField({ password, setPassword }: PasswordFieldProps) {
+export default function PasswordField({ placeholder, password, setPassword }: PasswordFieldProps) {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
         <PasswordFieldStyle
-            label="Password"
-            type={showPassword ? "text" : "password"}
-            value={password}
-            sx={{ width: "80%" }}
-            onChange={(e) => setPassword(e.target.value)}
+            placeholder={ placeholder }
+            type={ showPassword ? "text" : "password" }
+            value={ password }
+            sx={{ width: "100%", color: 'white', '&.Mui-focused': { color: 'white' } }}
+            onChange={ (e) => setPassword(e.target.value) }
             size="small"
             endAdornment={
                 <InputAdornment position="end">
                     <IconButton
-                        onClick={() => setShowPassword(!showPassword)}
+                        onClick={ () => setShowPassword(!showPassword) }
                         edge="end">
-                        {showPassword ? <VisibilityOutlined /> : <VisibilityOffOutlined />}
+                        { showPassword ? <VisibilityOutlined /> : <VisibilityOffOutlined /> }
                     </IconButton>
                 </InputAdornment>
             }

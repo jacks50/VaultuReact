@@ -11,9 +11,7 @@ export default function ConfirmButton(props: any) {
     return (
         <ConfirmButtonStyle
             { ...props }
-            sx={{
-                mt: 2, mb: 2, width: "80%"
-            }}
+            fullWidth
             size="medium"
             variant="outlined">
                 { props.children }

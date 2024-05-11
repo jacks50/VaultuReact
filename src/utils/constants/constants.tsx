@@ -1,0 +1,1 @@
+export const FILE_DOWNLOAD = "data:attachment/plain;charset=utf-8,"

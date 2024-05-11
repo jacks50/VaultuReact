@@ -22,9 +22,7 @@ const HiddenInputStyle = styled('input')({
 export default function FileInputButton({ handleFileUpload, selectedFile }: FileInputButtonProps) {
     return (
         <Button
-            sx={{
-                mt: 2, mb: 2, width: "80%"
-            }}
+            fullWidth
             size="medium"
             component="label"
             role={ undefined }
