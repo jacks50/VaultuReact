@@ -3,10 +3,12 @@ import { useState } from "react";
 
 export function usePasswordDialog(): UsePasswordDialog {
     const [ selectedPassword, setSelectedPassword ] = useState<PasswordItem>(noPasswordItem);
+    const [ isDialogOpen, setDialogOpen ] = useState(false);
 
     return {
         selectedPassword: selectedPassword,
         setSelectedPassword: setSelectedPassword,
-        isDialogOpen: selectedPassword?.passwordID != -1 || false,
+        isDialogOpen: isDialogOpen,
+        setDialogOpen: setDialogOpen,
     }
 }

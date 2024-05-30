@@ -6,6 +6,19 @@ export interface PasswordListProps {
 
 }
 
+export interface PasswordDialogInterface {
+    item: PasswordItem, 
+    open: boolean, 
+    close: () => void,
+    onSave: (item: PasswordItem) => void,
+}
+
+export interface PasswordCardInterface {
+    handleItemOpen: (item: PasswordItem) => void,
+    handleItemDelete: (itemUID: string) => void, 
+    item: PasswordItem
+}
+
 export interface PasswordItem {
     passwordID: number,
     passwordName: string,
@@ -40,4 +53,5 @@ export interface UsePasswordDialog {
     selectedPassword: PasswordItem,
     setSelectedPassword: (item: PasswordItem) => void,
     isDialogOpen: boolean,
+    setDialogOpen: (open: boolean) => void,
 }

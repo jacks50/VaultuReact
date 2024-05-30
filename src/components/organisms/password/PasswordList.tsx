@@ -2,7 +2,7 @@ import DownloadSnackbar from "@/components/atoms/snackbars/DownloadSnackbar";
 import AppToolbar, { Offset } from "@/components/molecules/actions/AppToolbar";
 import { SessionContext, defaultSessionData } from "@/context/useSessionContext";
 import { useSnackbar } from "@/hooks/useSnackbar";
-import { PasswordItem, PasswordListProps } from "@/interface/password/PasswordInterface";
+import { PasswordItem, PasswordListProps, defaultNewPasswordItem, noPasswordItem } from "@/interface/password/PasswordInterface";
 import { FILE_DOWNLOAD } from "@/utils/constants/constants";
 import { encryptFile } from "@/utils/encryption/encryptDecrypt";
 import { AddOutlined } from "@mui/icons-material";
@@ -10,12 +10,12 @@ import { Box, Fab, Grid, Typography } from "@mui/material";
 import { JSX, useContext, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { PasswordCard } from "../../molecules/passwords/PasswordCard";
-import { PasswordDialog } from "../../molecules/passwords/PasswordDialog";
+import { PasswordDialog } from "../../molecules/dialogs/PasswordDialog";
 import PasswordGenerator from "./PasswordGenerator";
+import { usePasswordDialog } from "@/hooks/usePasswordDialog";
 
 function PasswordList({}: PasswordListProps) {
     const [ search, setSearch ] = useState("");
-    const [ openNewPassword, setOpenNewPassword ] = useState(false);
     const [ openGenerator, setOpenGenerator ] = useState(false);
 
     const { sessionContextData, setSessionContextData } = useContext(SessionContext);
@@ -26,6 +26,23 @@ function PasswordList({}: PasswordListProps) {
         openSnackbar, 
         closeSnackbar 
     } = useSnackbar(0);
+
+    const {
+        selectedPassword,
+        setSelectedPassword,
+        isDialogOpen,
+        setDialogOpen
+    } = usePasswordDialog();
+
+    const handleItemOpen = (item: PasswordItem) => {
+        setSelectedPassword(item);
+        setDialogOpen(true);
+    }
+
+    const handleItemClose = () => {
+        //setSelectedPassword(noPasswordItem);
+        setDialogOpen(false);
+    }
 
     const handleItemSave = (itemValues: PasswordItem) => {
         const newMap = new Map(sessionContextData?.passwordList);
@@ -57,7 +74,7 @@ function PasswordList({}: PasswordListProps) {
                 passwordItems.push(
                     <PasswordCard
                         key={ passwordItem.passwordUID }
-                        handleItemSave={ handleItemSave }
+                        handleItemOpen={ handleItemOpen }
                         handleItemDelete={ handleItemDelete }
                         item={ passwordItem } />
                 )
@@ -114,9 +131,9 @@ function PasswordList({}: PasswordListProps) {
             }
 
             <PasswordDialog
-                item={ { passwordUID: uuid() } as PasswordItem }
-                open={ openNewPassword }
-                setOpen={ setOpenNewPassword }
+                item={ selectedPassword }
+                open={ isDialogOpen }
+                close={ handleItemClose }
                 onSave={ handleItemSave }/>
 
             <PasswordGenerator
@@ -133,7 +150,10 @@ function PasswordList({}: PasswordListProps) {
                 color="secondary" 
                 aria-label="add" 
                 sx={{ position: 'fixed', bottom: 24, right: 24 }}
-                onClick={ () => setOpenNewPassword(true) }>
+                onClick={ () => {
+                    setSelectedPassword({ ...defaultNewPasswordItem } as PasswordItem);
+                    setDialogOpen(true);
+                } }>
                 <AddOutlined/>
             </Fab>
         </Box>

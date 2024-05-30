@@ -3,6 +3,8 @@ import Login from "@/components/organisms/login/Login";
 import { LoginPageProps } from "@/interface/login/LoginInterface";
 import { Box, Typography } from "@mui/material";
 import { useState } from "react";
+import Image from "next/image";
+
 
 function LoginPage(props: LoginPageProps) {
     const [ creatingNewAccount, setCreatingNewAccount ] = useState(false);
@@ -17,7 +19,11 @@ function LoginPage(props: LoginPageProps) {
             flexGrow: 1,
             height: '100%',
         }}>
-            <img src="logo.svg" alt="VaultuReact logo" width={ 140 } height={ 140 }/>
+            <Image 
+                src="logo.svg" 
+                alt="VaultuReact logo" 
+                width={ 140 } 
+                height={ 140 }/>
 
             <Typography 
                 variant="h1">

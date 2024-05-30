@@ -1,28 +1,26 @@
 import PasswordField from "@/components/atoms/fields/PasswordField";
 import TextInputField from "@/components/atoms/fields/TextInputField";
-import { PasswordItem } from "@/interface/password/PasswordInterface";
+import { PasswordDialogInterface, PasswordItem } from "@/interface/password/PasswordInterface";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export function PasswordDialog(props: {
-    item: PasswordItem, 
-    open: boolean, 
-    setOpen: (open: boolean) => void,
-    onSave: (item: PasswordItem) => void,
-}) {
-    const item = props.item;
-    const open = props.open;
-    const setOpen = props.setOpen;
-    const onSave = props.onSave;
-    
+export function PasswordDialog({
+    item, 
+    open, 
+    close, 
+    onSave
+}: PasswordDialogInterface) {    
     const [ name, setName ] = useState(item.passwordName);
     const [ username, setUsername ] = useState(item.passwordUsername);
     const [ password, setPassword ] = useState(item.passwordValue);
     const [ url, setUrl ] = useState(item.passwordURL);
 
-    const handleClose = () => {
-        setOpen(false);
-    }
+    useEffect(() => {
+        setName(item.passwordName);
+        setUsername(item.passwordUsername);
+        setPassword(item.passwordValue);
+        setUrl(item.passwordURL);
+    }, [item])
 
     const handleSave = () => {
         onSave({
@@ -32,7 +30,7 @@ export function PasswordDialog(props: {
             passwordValue: password,
             passwordURL: url,
         })
-        setOpen(false);
+        close();
     }
 
     const handleCancel = () => {
@@ -40,7 +38,7 @@ export function PasswordDialog(props: {
         setUsername(item.passwordUsername);
         setPassword(item.passwordValue);
         setUrl(item.passwordURL);
-        setOpen(false);
+        close();
     }
 
     const handleFieldChange = (type: string, value: string) => {
@@ -68,7 +66,7 @@ export function PasswordDialog(props: {
     return (
         <Dialog
             open={ open } 
-            onClose={ handleClose }>
+            onClose={ close }>
             <DialogTitle>
                 { item.passwordName || "Add new password" }
             </DialogTitle>
