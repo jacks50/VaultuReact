@@ -1,8 +1,7 @@
-import { PasswordCardInterface, PasswordItem } from "@/interface/password/PasswordInterface";
+import { PasswordCardInterface } from "@/interface/password/PasswordInterface";
 import { DeleteRounded, EnhancedEncryptionRounded, PersonAddAlt1Rounded, PublicOutlined } from "@mui/icons-material";
 import { Card, CardActionArea, CardActions, CardContent, Grid, IconButton, Snackbar, Typography } from "@mui/material";
 import { useState } from "react";
-import { PasswordDialog } from "../dialogs/PasswordDialog";
 
 export function PasswordCard({
     handleItemOpen,

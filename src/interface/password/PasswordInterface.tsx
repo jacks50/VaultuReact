@@ -6,13 +6,6 @@ export interface PasswordListProps {
 
 }
 
-export interface PasswordDialogInterface {
-    item: PasswordItem, 
-    open: boolean, 
-    close: () => void,
-    onSave: (item: PasswordItem) => void,
-}
-
 export interface PasswordCardInterface {
     handleItemOpen: (item: PasswordItem) => void,
     handleItemDelete: (itemUID: string) => void, 
@@ -47,11 +40,4 @@ export const defaultNewPasswordItem: PasswordItem = {
     passwordValue: "",
     loginId: 0,
     passwordUID: ""
-}
-
-export interface UsePasswordDialog {
-    selectedPassword: PasswordItem,
-    setSelectedPassword: (item: PasswordItem) => void,
-    isDialogOpen: boolean,
-    setDialogOpen: (open: boolean) => void,
 }

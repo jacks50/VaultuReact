@@ -1,4 +1,5 @@
-import { PasswordItem, UsePasswordDialog, noPasswordItem } from "@/interface/password/PasswordInterface";
+import { UsePasswordDialog } from "@/interface/dialog/DialogInterface";
+import { PasswordItem, noPasswordItem } from "@/interface/password/PasswordInterface";
 import { useState } from "react";
 
 export function usePasswordDialog(): UsePasswordDialog {

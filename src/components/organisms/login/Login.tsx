@@ -34,7 +34,7 @@ function Login({ handleNewAccountCreate }: LoginProps) {
 
     const handleLogin = () => {
         setLoading(true);
-        // TODO : see where the click handler blocks the thread - maybe use the start login logics here
+        // TODO : still a problem here - high cpu loads that blocks the thread -> maybe a css approach can resolve that
         startLogin(
             password,
             (result: CryptLoginData) => {

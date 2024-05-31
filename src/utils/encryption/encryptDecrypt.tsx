@@ -1,4 +1,4 @@
-import { enc, algo, mode, pad, lib, AES, PBKDF2 } from "crypto-js";
+import { AES, PBKDF2, algo, enc, lib, mode, pad } from "crypto-js";
 import { v4 as uuid } from "uuid";
 
 export const getSalt = (fileContent: string) => {

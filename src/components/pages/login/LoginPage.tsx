@@ -2,8 +2,8 @@ import NewAccount from "@/components/organisms/account/NewAccount";
 import Login from "@/components/organisms/login/Login";
 import { LoginPageProps } from "@/interface/login/LoginInterface";
 import { Box, Typography } from "@mui/material";
-import { useState } from "react";
 import Image from "next/image";
+import { useState } from "react";
 
 
 function LoginPage(props: LoginPageProps) {

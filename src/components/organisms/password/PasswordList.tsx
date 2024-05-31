@@ -1,30 +1,31 @@
 import DownloadSnackbar from "@/components/atoms/snackbars/DownloadSnackbar";
 import AppToolbar, { Offset } from "@/components/molecules/actions/AppToolbar";
+import { ConfirmationDialog } from "@/components/molecules/dialogs/ConfirmationDialog";
 import { SessionContext, defaultSessionData } from "@/context/useSessionContext";
+import { useConfirmDialog } from "@/hooks/useConfirmDialog";
+import { usePasswordDialog } from "@/hooks/usePasswordDialog";
 import { useSnackbar } from "@/hooks/useSnackbar";
-import { PasswordItem, PasswordListProps, defaultNewPasswordItem, noPasswordItem } from "@/interface/password/PasswordInterface";
+import { PasswordItem, PasswordListProps, defaultNewPasswordItem } from "@/interface/password/PasswordInterface";
 import { FILE_DOWNLOAD } from "@/utils/constants/constants";
 import { encryptFile } from "@/utils/encryption/encryptDecrypt";
 import { AddOutlined } from "@mui/icons-material";
 import { Box, Fab, Grid, Typography } from "@mui/material";
 import { JSX, useContext, useState } from "react";
-import { v4 as uuid } from "uuid";
-import { PasswordCard } from "../../molecules/passwords/PasswordCard";
 import { PasswordDialog } from "../../molecules/dialogs/PasswordDialog";
+import { PasswordCard } from "../../molecules/passwords/PasswordCard";
 import PasswordGenerator from "./PasswordGenerator";
-import { usePasswordDialog } from "@/hooks/usePasswordDialog";
 
-function PasswordList({}: PasswordListProps) {
-    const [ search, setSearch ] = useState("");
-    const [ openGenerator, setOpenGenerator ] = useState(false);
+function PasswordList({ }: PasswordListProps) {
+    const [search, setSearch] = useState("");
+    const [openGenerator, setOpenGenerator] = useState(false);
 
     const { sessionContextData, setSessionContextData } = useContext(SessionContext);
-    
-    const { 
-        isOpen, 
-        message, 
-        openSnackbar, 
-        closeSnackbar 
+
+    const {
+        isOpen,
+        message,
+        openSnackbar,
+        closeSnackbar
     } = useSnackbar(0);
 
     const {
@@ -40,7 +41,6 @@ function PasswordList({}: PasswordListProps) {
     }
 
     const handleItemClose = () => {
-        //setSelectedPassword(noPasswordItem);
         setDialogOpen(false);
     }
 
@@ -55,12 +55,19 @@ function PasswordList({}: PasswordListProps) {
     }
 
     const handleItemDelete = (itemUID: string) => {
-        const newMap = new Map(sessionContextData?.passwordList);
-        newMap.delete(itemUID);
-        
-        setSessionContextData({
-            ...sessionContextData!,
-            passwordList: newMap
+        setDialogData({
+            value: itemUID,
+            title: "Delete password",
+            message: "Are you sure you want to delete this password ?",
+            callback: (itemToDelete: string) => {
+                const newMap = new Map(sessionContextData?.passwordList);
+                newMap.delete(itemToDelete);
+                
+                setSessionContextData({
+                    ...sessionContextData!,
+                    passwordList: newMap
+                });
+            }
         });
     }
 
@@ -68,8 +75,8 @@ function PasswordList({}: PasswordListProps) {
         const passwordItems: JSX.Element[] = [];
 
         sessionContextData?.passwordList?.forEach((passwordItem, passwordUID) => {
-            if (!search || 
-                passwordItem.passwordName.toLowerCase().includes(search.toLowerCase()) || 
+            if (!search ||
+                passwordItem.passwordName.toLowerCase().includes(search.toLowerCase()) ||
                 passwordItem.passwordURL.toLowerCase().includes(search.toLowerCase()))
                 passwordItems.push(
                     <PasswordCard
@@ -100,61 +107,82 @@ function PasswordList({}: PasswordListProps) {
     }
 
     const handleLogout = () => {
-        setSessionContextData(defaultSessionData);
+        setDialogData({
+            value: true,
+            title: "Logout",
+            message: "Are you sure you want to logout ?",
+            callback: () => {
+                setSessionContextData(defaultSessionData);
+            }
+        });        
     }
+
+    const {
+        dialogData,
+        setDialogData,
+        confirmHandler,
+        dismissHandler,
+    } = useConfirmDialog();
 
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppToolbar 
-                logoutHandler={ handleLogout } 
-                saveListHandler={ handleListSave }
-                searchHandler={ setSearch }
-                setOpenGenerator={ setOpenGenerator }/>
+            <AppToolbar
+                logoutHandler={handleLogout}
+                saveListHandler={handleListSave}
+                searchHandler={setSearch}
+                setOpenGenerator={setOpenGenerator} />
 
-            <Offset/>
+            <Offset />
 
-            { 
+            {
                 sessionContextData?.passwordList?.size == 0 ?
-                <Typography 
-                    variant="h5"
-                    align="center">
-                    No passwords yet : add your first password by clicking on the + button on the bottom right
-                </Typography> 
-                :                
-                <Grid 
-                    container 
-                    padding={{ xs: 2, md: 4 }}
-                    rowSpacing={{ xs: 3, md: 2}}
-                    columnSpacing={{ xs: 0, md: 2 }}>
-                    { getPasswordCards() }
-                </Grid>
+                    <Typography
+                        variant="h5"
+                        align="center">
+                        No passwords yet : add your first password by clicking on the + button on the bottom right
+                    </Typography>
+                    :
+                    <Grid
+                        container
+                        padding={{ xs: 2, md: 4 }}
+                        rowSpacing={{ xs: 3, md: 2 }}
+                        columnSpacing={{ xs: 0, md: 2 }}>
+                        {getPasswordCards()}
+                    </Grid>
             }
 
             <PasswordDialog
                 item={ selectedPassword }
                 open={ isDialogOpen }
                 close={ handleItemClose }
-                onSave={ handleItemSave }/>
+                onSave={ handleItemSave } />
+
+            <ConfirmationDialog
+                title={ dialogData.title }
+                message={ dialogData.message }
+                open={ dialogData.value ? true : false }
+                callback={ confirmHandler }
+                dismiss={ dismissHandler } />
 
             <PasswordGenerator
-                open={ openGenerator }
-                closeGenerator={ () => setOpenGenerator(false) }/>
+                open={openGenerator}
+                closeGenerator={() => setOpenGenerator(false)} />
 
             <DownloadSnackbar
-                isOpen={ isOpen }
-                downloadLink={ message }
-                downloadName={ sessionContextData?.fileName || "Updated file" }
-                closeHandler={ closeSnackbar }/>
+                isOpen={isOpen}
+                downloadLink={message}
+                downloadName={sessionContextData?.fileName || "Updated file"}
+                closeHandler={closeSnackbar} />
 
-            <Fab 
-                color="secondary" 
-                aria-label="add" 
+            <Fab
+                color="secondary"
+                aria-label="add"
                 sx={{ position: 'fixed', bottom: 24, right: 24 }}
-                onClick={ () => {
+                onClick={() => {
                     setSelectedPassword({ ...defaultNewPasswordItem } as PasswordItem);
                     setDialogOpen(true);
-                } }>
-                <AddOutlined/>
+                }}>
+                <AddOutlined />
             </Fab>
         </Box>
     )
