@@ -1,6 +1,6 @@
 import PasswordField from "@/components/atoms/fields/PasswordField";
 import TextInputField from "@/components/atoms/fields/TextInputField";
-import { PasswordDialogInterface } from "@/interface/password/PasswordInterface";
+import { PasswordDialogInterface } from "@/interface/dialog/DialogInterface";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
 import { useEffect, useState } from "react";
 
