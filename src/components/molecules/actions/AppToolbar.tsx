@@ -17,20 +17,20 @@ const AppToolbarStyle = styled(AppBar)({
 
 export const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
-export default function AppToolbar({ 
-    saveListHandler, 
-    logoutHandler, 
+export default function AppToolbar({
+    saveListHandler,
+    logoutHandler,
     searchHandler,
-    setOpenGenerator, 
+    setOpenGenerator,
 }: AppToolbarProps) {
-    const [ mobileMoreAnchorEl, setMobileMoreAnchorEl ] = React.useState<null | HTMLElement>(null);
+    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
 
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
     const handleMobileMenuOpen = (e: React.MouseEvent<HTMLElement>) => {
         setMobileMoreAnchorEl(e.currentTarget);
     }
-    
+
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
     }
@@ -40,23 +40,23 @@ export default function AppToolbar({
             <IconButton
                 color="inherit"
                 aria-label="save"
-                onClick={ saveListHandler }>
+                onClick={saveListHandler}>
                 <SaveOutlined />
             </IconButton>
-    
+
             <IconButton
                 size="large"
                 color="inherit"
                 aria-label="generate password"
-                onClick={ () => setOpenGenerator(true) } >
+                onClick={() => setOpenGenerator(true)} >
                 <PasswordOutlined />
             </IconButton>
-    
+
             <IconButton
                 size="large"
                 color="inherit"
                 aria-label="logout"
-                onClick={ logoutHandler } >
+                onClick={logoutHandler} >
                 <Logout />
             </IconButton>
         </Box>
@@ -69,29 +69,29 @@ export default function AppToolbar({
                 color="inherit"
                 aria-label="show more"
                 aria-controls="primary-search-account-menu-mobile"
-                onClick={ handleMobileMenuOpen } >
+                onClick={handleMobileMenuOpen} >
                 <MoreVertOutlined />
             </IconButton>
 
-            <Menu 
-                anchorEl={ mobileMoreAnchorEl }
+            <Menu
+                anchorEl={mobileMoreAnchorEl}
                 anchorOrigin={{
                     vertical: 'top',
                     horizontal: 'right',
                 }}
-                id={ 'primary-search-account-menu-mobile' }
+                id={'primary-search-account-menu-mobile'}
                 keepMounted
                 transformOrigin={{
                     vertical: 'top',
                     horizontal: 'right',
                 }}
-                open={ isMobileMenuOpen }
-                onClose={ handleMobileMenuClose }>
-                <MenuItem 
-                    onClick={ () => {
+                open={isMobileMenuOpen}
+                onClose={handleMobileMenuClose}>
+                <MenuItem
+                    onClick={() => {
                         saveListHandler();
                         handleMobileMenuClose();
-                    } }>
+                    }}>
                     <IconButton
                         size="large"
                         color="inherit"
@@ -102,10 +102,10 @@ export default function AppToolbar({
                 </MenuItem>
 
                 <MenuItem
-                        onClick={ () => {
-                            setOpenGenerator(true);
-                            handleMobileMenuClose();
-                        } }>
+                    onClick={() => {
+                        setOpenGenerator(true);
+                        handleMobileMenuClose();
+                    }}>
                     <IconButton
                         size="large"
                         color="inherit"
@@ -116,10 +116,10 @@ export default function AppToolbar({
                 </MenuItem>
 
                 <MenuItem
-                    onClick={ () => {
+                    onClick={() => {
                         logoutHandler();
                         handleMobileMenuClose();
-                    } }>
+                    }}>
                     <IconButton
                         size="large"
                         color="inherit"
@@ -143,13 +143,13 @@ export default function AppToolbar({
                     Vaulture
                 </Typography>
 
-                <AppSearch 
-                    searchHandler={ searchHandler } />
+                <AppSearch
+                    searchHandler={searchHandler} />
 
                 <Box sx={{ flexGrow: 1 }} />
 
-                { renderMenu }
-                { renderMobileMenu }
+                {renderMenu}
+                {renderMobileMenu}
             </Toolbar>
         </AppToolbarStyle>
     );

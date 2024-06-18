@@ -4,17 +4,17 @@ interface ConfirmButtonProps {
 }
 
 const ConfirmButtonStyle = styled(Button)({
-    
+
 });
 
 export default function ConfirmButton(props: any) {
     return (
         <ConfirmButtonStyle
-            { ...props }
+            {...props}
             fullWidth
             size="medium"
             variant="outlined">
-                { props.children }
+            {props.children}
         </ConfirmButtonStyle>
     )
 }

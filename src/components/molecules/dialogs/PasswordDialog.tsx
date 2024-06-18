@@ -5,15 +5,15 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "
 import { useEffect, useState } from "react";
 
 export function PasswordDialog({
-    item, 
-    open, 
-    close, 
+    item,
+    open,
+    close,
     onSave
-}: PasswordDialogInterface) {    
-    const [ name, setName ] = useState(item.passwordName);
-    const [ username, setUsername ] = useState(item.passwordUsername);
-    const [ password, setPassword ] = useState(item.passwordValue);
-    const [ url, setUrl ] = useState(item.passwordURL);
+}: PasswordDialogInterface) {
+    const [name, setName] = useState(item.passwordName);
+    const [username, setUsername] = useState(item.passwordUsername);
+    const [password, setPassword] = useState(item.passwordValue);
+    const [url, setUrl] = useState(item.passwordURL);
 
     useEffect(() => {
         setName(item.passwordName);
@@ -59,16 +59,16 @@ export function PasswordDialog({
                 setUrl(value);
                 break;
             }
-            default: {}
+            default: { }
         }
     }
 
     return (
         <Dialog
-            open={ open } 
-            onClose={ close }>
+            open={open}
+            onClose={close}>
             <DialogTitle>
-                { item.passwordName || "Add new password" }
+                {item.passwordName || "Add new password"}
             </DialogTitle>
 
             <DialogContent>
@@ -80,30 +80,30 @@ export function PasswordDialog({
                     gap: 2,
                 }}>
                     <TextInputField
-                        text={ name }
+                        text={name}
                         placeholder="Name"
-                        setText={ (value) => handleFieldChange("name", value) }/>
-                    
-                    <TextInputField
-                        text={ url }
-                        placeholder="URL"
-                        setText={ (value) => handleFieldChange("url", value) }/>
+                        setText={(value) => handleFieldChange("name", value)} />
 
                     <TextInputField
-                        text={ username }
+                        text={url}
+                        placeholder="URL"
+                        setText={(value) => handleFieldChange("url", value)} />
+
+                    <TextInputField
+                        text={username}
                         placeholder="Username"
-                        setText={ (value) => handleFieldChange("username", value) }/>
+                        setText={(value) => handleFieldChange("username", value)} />
 
                     <PasswordField
                         placeholder="Password"
-                        password={ password }
-                        setPassword={ (value) => handleFieldChange("password", value) }/>
+                        password={password}
+                        setPassword={(value) => handleFieldChange("password", value)} />
                 </Box>
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={ handleSave }>Save</Button>
-                <Button onClick={ handleCancel }>Cancel</Button>
+                <Button onClick={handleSave}>Save</Button>
+                <Button onClick={handleCancel}>Cancel</Button>
             </DialogActions>
         </Dialog>
     );

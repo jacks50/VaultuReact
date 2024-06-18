@@ -1,6 +1,5 @@
 'use client'
 
-import ErrorSnackbar from "@/components/atoms/snackbars/ErrorSnackbar";
 import { SessionContext } from "@/context/useSessionContext";
 import { useLogin } from "@/hooks/useLogin";
 import { useSnackbar } from "@/hooks/useSnackbar";
@@ -10,6 +9,7 @@ import { ChangeEvent, useContext, useState } from "react";
 import ConfirmButton from "../../atoms/buttons/ConfirmButton";
 import FileInputButton from "../../atoms/buttons/FileInputButton";
 import PasswordField from "../../atoms/fields/PasswordField";
+import CustomSnackbar from "@/components/atoms/snackbars/CustomSnackbar";
 
 function Login({ handleNewAccountCreate }: LoginProps) {
     const [ isLoading, setLoading ] = useState(false);
@@ -24,13 +24,14 @@ function Login({ handleNewAccountCreate }: LoginProps) {
         uploadedFile,
         startLogin,
     } = useLogin();
-    
-    const { 
+
+    const {
         isOpen, 
         message, 
+        snackbarType,
         openSnackbar, 
         closeSnackbar 
-    } = useSnackbar(3000);
+    } = useSnackbar();
 
     const handleLogin = () => {
         setLoading(true);
@@ -53,7 +54,7 @@ function Login({ handleNewAccountCreate }: LoginProps) {
             },
             (err: any) => {
                 setLoading(false);
-                openSnackbar("Incorrect login / password");
+                openSnackbar("Incorrect login / password", "error");
                 console.error(err);
             }
         );
@@ -61,7 +62,7 @@ function Login({ handleNewAccountCreate }: LoginProps) {
 
     const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) {
-            openSnackbar("Please select a valid file to be uploaded");
+            openSnackbar("Please select a valid file to be uploaded", "error");
             return;
         }
 
@@ -105,9 +106,10 @@ function Login({ handleNewAccountCreate }: LoginProps) {
                 style={{ width: '100%' }}
                  /> }
 
-            <ErrorSnackbar 
+            <CustomSnackbar
                 isOpen={ isOpen }
-                errorMessage={ message }
+                type={ snackbarType }
+                message={ message }
                 closeHandler={ closeSnackbar }/>
         </Box>
     )

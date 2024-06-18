@@ -17,20 +17,20 @@ export function ConfirmationDialog({
 }: ConfirmationDialogInterface) {
     return (
         <Dialog
-            open={ open }>
+            open={open}>
             <DialogTitle>
-                { title }
+                {title}
             </DialogTitle>
 
             <DialogContent>
                 <DialogContentText>
-                    { message }
+                    {message}
                 </DialogContentText>
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={ () => callback() }>Yes</Button>
-                <Button onClick={ () => dismiss() }>Cancel</Button>
+                <Button onClick={() => callback()}>Yes</Button>
+                <Button onClick={() => dismiss()}>Cancel</Button>
             </DialogActions>
         </Dialog>
     );

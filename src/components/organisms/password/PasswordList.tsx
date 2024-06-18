@@ -1,4 +1,4 @@
-import DownloadSnackbar from "@/components/atoms/snackbars/DownloadSnackbar";
+import CustomSnackbar from "@/components/atoms/snackbars/CustomSnackbar";
 import AppToolbar, { Offset } from "@/components/molecules/actions/AppToolbar";
 import { ConfirmationDialog } from "@/components/molecules/dialogs/ConfirmationDialog";
 import { SessionContext, defaultSessionData } from "@/context/useSessionContext";
@@ -24,9 +24,11 @@ function PasswordList({ }: PasswordListProps) {
     const {
         isOpen,
         message,
+        downloadLink,
+        snackbarType,
         openSnackbar,
         closeSnackbar
-    } = useSnackbar(0);
+    } = useSnackbar();
 
     const {
         selectedPassword,
@@ -62,7 +64,7 @@ function PasswordList({ }: PasswordListProps) {
             callback: (itemToDelete: string) => {
                 const newMap = new Map(sessionContextData?.passwordList);
                 newMap.delete(itemToDelete);
-                
+
                 setSessionContextData({
                     ...sessionContextData!,
                     passwordList: newMap
@@ -80,10 +82,10 @@ function PasswordList({ }: PasswordListProps) {
                 passwordItem.passwordURL.toLowerCase().includes(search.toLowerCase()))
                 passwordItems.push(
                     <PasswordCard
-                        key={ passwordItem.passwordUID }
-                        handleItemOpen={ handleItemOpen }
-                        handleItemDelete={ handleItemDelete }
-                        item={ passwordItem } />
+                        key={passwordItem.passwordUID}
+                        handleItemOpen={handleItemOpen}
+                        handleItemDelete={handleItemDelete}
+                        item={passwordItem} />
                 )
         });
 
@@ -98,10 +100,10 @@ function PasswordList({ }: PasswordListProps) {
                 sessionContextData.sessionIV!,
                 sessionContextData.sessionSalt!)
                 .then((result) => {
-                    openSnackbar(FILE_DOWNLOAD + encodeURIComponent(result));
+                    openSnackbar(sessionContextData.fileName!, "download", FILE_DOWNLOAD + encodeURIComponent(result));
                 })
                 .catch((error) => {
-                    console.error(error);
+                    openSnackbar("An error occured while trying to save the new file", "error");
                 });
         }
     }
@@ -114,7 +116,7 @@ function PasswordList({ }: PasswordListProps) {
             callback: () => {
                 setSessionContextData(defaultSessionData);
             }
-        });        
+        });
     }
 
     const {
@@ -152,26 +154,27 @@ function PasswordList({ }: PasswordListProps) {
             }
 
             <PasswordDialog
-                item={ selectedPassword }
-                open={ isDialogOpen }
-                close={ handleItemClose }
-                onSave={ handleItemSave } />
+                item={selectedPassword}
+                open={isDialogOpen}
+                close={handleItemClose}
+                onSave={handleItemSave} />
 
             <ConfirmationDialog
-                title={ dialogData.title }
-                message={ dialogData.message }
-                open={ dialogData.value ? true : false }
-                callback={ confirmHandler }
-                dismiss={ dismissHandler } />
+                title={dialogData.title}
+                message={dialogData.message}
+                open={dialogData.value ? true : false}
+                callback={confirmHandler}
+                dismiss={dismissHandler} />
 
             <PasswordGenerator
                 open={openGenerator}
                 closeGenerator={() => setOpenGenerator(false)} />
 
-            <DownloadSnackbar
+            <CustomSnackbar
                 isOpen={isOpen}
-                downloadLink={message}
-                downloadName={sessionContextData?.fileName || "Updated file"}
+                type={snackbarType}
+                message={message}
+                downloadLink={downloadLink}
                 closeHandler={closeSnackbar} />
 
             <Fab

@@ -3,7 +3,7 @@ import { PasswordPageProps } from "@/interface/password/PasswordInterface";
 
 function PasswordListPage(props: PasswordPageProps) {
     return (
-        <PasswordList { ...props }/>
+        <PasswordList {...props} />
     );
 }
 

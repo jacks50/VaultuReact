@@ -1,6 +1,8 @@
+import CustomSnackbar from "@/components/atoms/snackbars/CustomSnackbar";
+import { useSnackbar } from "@/hooks/useSnackbar";
 import { PasswordCardInterface } from "@/interface/password/PasswordInterface";
 import { DeleteRounded, EnhancedEncryptionRounded, PersonAddAlt1Rounded, PublicOutlined } from "@mui/icons-material";
-import { Card, CardActionArea, CardActions, CardContent, Grid, IconButton, Snackbar, Typography } from "@mui/material";
+import { Card, CardActionArea, CardActions, CardContent, Grid, IconButton, Typography } from "@mui/material";
 import { useState } from "react";
 
 export function PasswordCard({
@@ -8,7 +10,16 @@ export function PasswordCard({
     handleItemDelete,
     item
 }: PasswordCardInterface) {
-    const [ snackbarMsg, setSnackbarMsg ] = useState("");
+    const [snackbarMsg, setSnackbarMsg] = useState("");
+
+    const {
+        isOpen,
+        message,
+        downloadLink,
+        snackbarType,
+        openSnackbar,
+        closeSnackbar
+    } = useSnackbar();
 
     const handleOpenUrl = (url: string) => {
         window.open(url)?.focus;
@@ -17,59 +28,58 @@ export function PasswordCard({
     const handleCopy = async (label: string, value: string) => {
         if (navigator.clipboard) {
             await navigator.clipboard.writeText(value);
-            setSnackbarMsg(`${label} copied !`);
+            openSnackbar(`${label} copied !`, "success");
         } else {
-            setSnackbarMsg("No clipboard found to copy text");
+            openSnackbar("No clipboard found to copy text", "error");
         }
     }
 
-    // TODO : Maybe not the best since each card has its own dialog, we should reuse that
-    // TODO : Also add confirmation dialogs
     return (
         <Grid item xs={12} sm={6} md={3} key={item.passwordUID}>
-            <Card key={ item.passwordUID }>
-                <CardActionArea onClick={ () => handleItemOpen(item) }>
+            <Card key={item.passwordUID}>
+                <CardActionArea onClick={() => handleItemOpen(item)}>
                     <CardContent>
                         <Typography variant="h5" component="div">
-                            { item.passwordName }
+                            {item.passwordName}
                         </Typography>
                     </CardContent>
                 </CardActionArea>
 
                 <CardActions disableSpacing>
-                    <IconButton 
+                    <IconButton
                         sx={{ ml: 'auto' }}
                         aria-label="Open URL"
-                        onClick={ () => handleOpenUrl(item.passwordURL) }>
-                        <PublicOutlined/>
+                        onClick={() => handleOpenUrl(item.passwordURL)}>
+                        <PublicOutlined />
                     </IconButton>
 
-                    <IconButton 
+                    <IconButton
                         aria-label="Copy username"
-                        onClick={ () => handleCopy('Username', item.passwordUsername) }>
-                        <PersonAddAlt1Rounded/>
+                        onClick={() => handleCopy('Username', item.passwordUsername)}>
+                        <PersonAddAlt1Rounded />
                     </IconButton>
-                    
-                    <IconButton 
+
+                    <IconButton
                         aria-label="Copy password"
-                        onClick={ () => handleCopy('Password', item.passwordValue) }>
-                        <EnhancedEncryptionRounded/>
+                        onClick={() => handleCopy('Password', item.passwordValue)}>
+                        <EnhancedEncryptionRounded />
                     </IconButton>
-                    
-                    <IconButton 
+
+                    <IconButton
                         aria-label="Delete password"
                         color="secondary"
-                        onClick={ () => handleItemDelete(item.passwordUID) }>
-                        <DeleteRounded/>
+                        onClick={() => handleItemDelete(item.passwordUID)}>
+                        <DeleteRounded />
                     </IconButton>
                 </CardActions>
             </Card>
 
-            <Snackbar
-                open={ snackbarMsg != "" }
-                autoHideDuration={ 3000 }
-                onClose={ () => setSnackbarMsg("") }
-                message={ snackbarMsg } />
+            <CustomSnackbar
+                isOpen={isOpen}
+                type={snackbarType}
+                message={message}
+                downloadLink={downloadLink}
+                closeHandler={closeSnackbar} />
         </Grid>
     );
 }

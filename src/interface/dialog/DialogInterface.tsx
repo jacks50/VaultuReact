@@ -8,8 +8,8 @@ export interface UsePasswordDialog {
 }
 
 export interface PasswordDialogInterface {
-    item: PasswordItem, 
-    open: boolean, 
+    item: PasswordItem,
+    open: boolean,
     close: () => void,
     onSave: (item: PasswordItem) => void,
 }
@@ -29,8 +29,8 @@ export interface ConfirmDialogData {
 }
 
 export const defaultDialogData = {
-    value: undefined, 
-    title: "", 
-    message: "", 
-    callback: () => {}
+    value: undefined,
+    title: "",
+    message: "",
+    callback: () => { }
 }

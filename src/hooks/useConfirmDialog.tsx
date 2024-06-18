@@ -2,12 +2,12 @@ import { ConfirmDialogData, UseConfirmDialog, defaultDialogData } from "@/interf
 import { useCallback, useState } from "react";
 
 export function useConfirmDialog(): UseConfirmDialog {
-    const [ dialogData, setDialogData ] = useState<ConfirmDialogData>(defaultDialogData);
+    const [dialogData, setDialogData] = useState<ConfirmDialogData>(defaultDialogData);
 
     const confirmHandler = useCallback(() => {
         dialogData.callback(dialogData.value);
         setDialogData(defaultDialogData)
-    }, [ dialogData ]);
+    }, [dialogData]);
 
     const dismissHandler = () => {
         setDialogData(defaultDialogData);

@@ -3,8 +3,8 @@ import { PasswordItem, noPasswordItem } from "@/interface/password/PasswordInter
 import { useState } from "react";
 
 export function usePasswordDialog(): UsePasswordDialog {
-    const [ selectedPassword, setSelectedPassword ] = useState<PasswordItem>(noPasswordItem);
-    const [ isDialogOpen, setDialogOpen ] = useState(false);
+    const [selectedPassword, setSelectedPassword] = useState<PasswordItem>(noPasswordItem);
+    const [isDialogOpen, setDialogOpen] = useState(false);
 
     return {
         selectedPassword: selectedPassword,

@@ -7,7 +7,7 @@ import { useState } from "react";
 
 
 function LoginPage(props: LoginPageProps) {
-    const [ creatingNewAccount, setCreatingNewAccount ] = useState(false);
+    const [creatingNewAccount, setCreatingNewAccount] = useState(false);
 
     return (
         <Box sx={{
@@ -19,21 +19,21 @@ function LoginPage(props: LoginPageProps) {
             flexGrow: 1,
             height: '100%',
         }}>
-            <Image 
-                src="logo.svg" 
-                alt="VaultuReact logo" 
-                width={ 140 } 
-                height={ 140 }/>
+            <Image
+                src="logo.svg"
+                alt="VaultuReact logo"
+                width={140}
+                height={140} />
 
-            <Typography 
+            <Typography
                 variant="h1">
                 VaultuReact
             </Typography>
-            
-            { 
+
+            {
                 creatingNewAccount ?
-                <NewAccount handleNewAccountCancel={ () => setCreatingNewAccount(false) } /> : 
-                <Login handleNewAccountCreate={ () => setCreatingNewAccount(true) }/>
+                    <NewAccount handleNewAccountCancel={() => setCreatingNewAccount(false)} /> :
+                    <Login handleNewAccountCreate={() => setCreatingNewAccount(true)} />
             }
         </Box>
     );

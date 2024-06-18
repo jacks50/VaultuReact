@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react";
 
-export function useSnackbar(timeout: number) {
-    const [ isOpen, setOpen ] = useState(false);
-    const [ message, setMessage ] = useState("");
+export function useSnackbar(): UseSnackbar {
+    const [isOpen, setOpen] = useState(false);
+    const [message, setMessage] = useState("");
+    const [snackbarType, setSnackbarType] = useState<SnackbarType>("success");
+    const [downloadLink, setDownloadLink] = useState<string | undefined>();
 
     useEffect(() => {
-        if (timeout > 0 && isOpen) {
+        if (snackbarType != "download" && isOpen) {
             setTimeout(() => {
                 setOpen(false);
-            }, timeout);
+            }, 3000);
         }
-    }, [isOpen, timeout]);
+    }, [isOpen, snackbarType]);
 
-    const openSnackbar = (message: string) => {
+    const openSnackbar = (message: string, snackbarType: SnackbarType, downloadLink?: string) => {
         setMessage(message);
+        setSnackbarType(snackbarType);
+        setDownloadLink(downloadLink);
         setOpen(true);
     }
 
@@ -21,5 +25,12 @@ export function useSnackbar(timeout: number) {
         setOpen(false);
     }
 
-    return { isOpen, message, openSnackbar, closeSnackbar };
+    return {
+        isOpen,
+        message,
+        downloadLink,
+        snackbarType,
+        openSnackbar,
+        closeSnackbar
+    };
 }

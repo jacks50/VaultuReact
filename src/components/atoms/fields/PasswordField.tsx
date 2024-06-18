@@ -9,7 +9,7 @@ interface PasswordFieldProps {
 }
 
 const PasswordFieldStyle = styled(OutlinedInput)({
-    
+
 });
 
 export default function PasswordField({ placeholder, password, setPassword }: PasswordFieldProps) {
@@ -17,18 +17,18 @@ export default function PasswordField({ placeholder, password, setPassword }: Pa
 
     return (
         <PasswordFieldStyle
-            placeholder={ placeholder }
-            type={ showPassword ? "text" : "password" }
-            value={ password }
+            placeholder={placeholder}
+            type={showPassword ? "text" : "password"}
+            value={password}
             sx={{ width: "100%", color: 'white', '&.Mui-focused': { color: 'white' } }}
-            onChange={ (e) => setPassword(e.target.value) }
+            onChange={(e) => setPassword(e.target.value)}
             size="small"
             endAdornment={
                 <InputAdornment position="end">
                     <IconButton
-                        onClick={ () => setShowPassword(!showPassword) }
+                        onClick={() => setShowPassword(!showPassword)}
                         edge="end">
-                        { showPassword ? <VisibilityOutlined /> : <VisibilityOffOutlined /> }
+                        {showPassword ? <VisibilityOutlined /> : <VisibilityOffOutlined />}
                     </IconButton>
                 </InputAdornment>
             }

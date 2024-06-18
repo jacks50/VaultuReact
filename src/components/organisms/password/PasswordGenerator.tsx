@@ -13,14 +13,14 @@ interface PasswordGeneratorProps {
     closeGenerator: () => void
 }
 
-export default function PasswordGenerator({ 
-    open, 
+export default function PasswordGenerator({
+    open,
     closeGenerator
 }: PasswordGeneratorProps) {
-    const [ nbChars, setNbChars ] = useState(12);
-    const [ nbInteger, setNbInteger ] = useState(4);
-    const [ nbSymbol, setNbSymbol] = useState(4);
-    const [ generatedPassword, setGeneratedPassword ] = useState("");
+    const [nbChars, setNbChars] = useState(12);
+    const [nbInteger, setNbInteger] = useState(4);
+    const [nbSymbol, setNbSymbol] = useState(4);
+    const [generatedPassword, setGeneratedPassword] = useState("");
 
     const handleGeneration = () => {
         let password = "";
@@ -65,9 +65,9 @@ export default function PasswordGenerator({
     }
 
     return (
-        <Dialog 
-            open={ open } 
-            onClose={ handleClose }>
+        <Dialog
+            open={open}
+            onClose={handleClose}>
             <DialogTitle>
                 Generate a new password
             </DialogTitle>
@@ -76,88 +76,88 @@ export default function PasswordGenerator({
                 <Grid
                     container
                     spacing={{ xs: 4 }}>
-                        <Grid item xs={ 2 }>
-                            <AbcOutlined fontSize="large" />
-                        </Grid>
-                        <Grid item xs={ 8 }>
-                            <Slider
-                                defaultValue={ nbChars }
-                                step={ 1 }
-                                min={ 12 }
-                                max={ 36 }
-                                marks
-                                onChange={ (e, v) => handleNbChars(v as number) } />
-                        </Grid>
-                        <Grid item xs={ 2 }>
-                            <TextField 
-                                type="number" 
-                                variant="standard"
-                                size="small"
-                                disabled={ true }
-                                inputProps={{ style: {textAlign: "center"} }} 
-                                value={ nbChars } 
-                                onChange={ (e) => handleNbChars(Number(e.target.value)) }/>
-                        </Grid>
+                    <Grid item xs={2}>
+                        <AbcOutlined fontSize="large" />
+                    </Grid>
+                    <Grid item xs={8}>
+                        <Slider
+                            defaultValue={nbChars}
+                            step={1}
+                            min={12}
+                            max={36}
+                            marks
+                            onChange={(e, v) => handleNbChars(v as number)} />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <TextField
+                            type="number"
+                            variant="standard"
+                            size="small"
+                            disabled={true}
+                            inputProps={{ style: { textAlign: "center" } }}
+                            value={nbChars}
+                            onChange={(e) => handleNbChars(Number(e.target.value))} />
+                    </Grid>
 
-                        <Grid item xs={ 2 }>
-                            <NumbersOutlined fontSize="large" />
-                        </Grid>
-                        <Grid item xs={ 8 }>
-                            <Slider
-                                defaultValue={ nbInteger }
-                                step={ 1 }
-                                min={ 4 }
-                                max={ 12 }
-                                marks
-                                onChange={ (e, v) => handleNbIntegers(v as number) } />
-                        </Grid>
-                        <Grid item xs={ 2 }>
-                            <TextField 
-                                type="number" 
-                                variant="standard"
-                                size="small"
-                                disabled={ true }
-                                inputProps={{ style: {textAlign: "center"} }} 
-                                value={ nbInteger } 
-                                onChange={ (e) => handleNbIntegers(Number(e.target.value)) }/>
-                        </Grid>
+                    <Grid item xs={2}>
+                        <NumbersOutlined fontSize="large" />
+                    </Grid>
+                    <Grid item xs={8}>
+                        <Slider
+                            defaultValue={nbInteger}
+                            step={1}
+                            min={4}
+                            max={12}
+                            marks
+                            onChange={(e, v) => handleNbIntegers(v as number)} />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <TextField
+                            type="number"
+                            variant="standard"
+                            size="small"
+                            disabled={true}
+                            inputProps={{ style: { textAlign: "center" } }}
+                            value={nbInteger}
+                            onChange={(e) => handleNbIntegers(Number(e.target.value))} />
+                    </Grid>
 
-                        <Grid item xs={ 2 }>
-                            <EmojiSymbolsOutlined fontSize="large" />
-                        </Grid>
-                        <Grid item xs={ 8 }>
-                            <Slider
-                                defaultValue={ nbSymbol }
-                                step={ 1 }
-                                min={ 4 }
-                                max={ 12 }
-                                marks
-                                onChange={ (e, v) => handleNbSymbols(v as number) } />
-                        </Grid>
-                        <Grid item xs={ 2 }>
-                            <TextField 
-                                type="number" 
-                                variant="standard"
-                                size="small"
-                                disabled={ true }
-                                inputProps={{ style: {textAlign: "center"} }} 
-                                value={ nbSymbol }
-                                onChange={ (e) => handleNbSymbols(Number(e.target.value)) }/>
-                        </Grid>
+                    <Grid item xs={2}>
+                        <EmojiSymbolsOutlined fontSize="large" />
+                    </Grid>
+                    <Grid item xs={8}>
+                        <Slider
+                            defaultValue={nbSymbol}
+                            step={1}
+                            min={4}
+                            max={12}
+                            marks
+                            onChange={(e, v) => handleNbSymbols(v as number)} />
+                    </Grid>
+                    <Grid item xs={2}>
+                        <TextField
+                            type="number"
+                            variant="standard"
+                            size="small"
+                            disabled={true}
+                            inputProps={{ style: { textAlign: "center" } }}
+                            value={nbSymbol}
+                            onChange={(e) => handleNbSymbols(Number(e.target.value))} />
+                    </Grid>
                 </Grid>
-                
-                <TextField 
+
+                <TextField
                     sx={{ mt: 4 }}
-                    label={ generatedPassword ? `Password with ${nbChars} characters, ${nbInteger} numbers and ${nbSymbol} symbols` : '' }
-                    fullWidth 
-                    inputProps={{ style: {textAlign: "center"} }} 
-                    value={ generatedPassword }/>
+                    label={generatedPassword ? `Password with ${nbChars} characters, ${nbInteger} numbers and ${nbSymbol} symbols` : ''}
+                    fullWidth
+                    inputProps={{ style: { textAlign: "center" } }}
+                    value={generatedPassword} />
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={ handleGeneration }>Generate</Button>
-                <Button onClick={ handleCopy }>Copy</Button>
-                <Button onClick={ closeGenerator }>Close</Button>
+                <Button onClick={handleGeneration}>Generate</Button>
+                <Button onClick={handleCopy}>Copy</Button>
+                <Button onClick={closeGenerator}>Close</Button>
             </DialogActions>
         </Dialog>
     );

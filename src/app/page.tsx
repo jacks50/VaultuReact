@@ -5,10 +5,11 @@ import { Container, CssBaseline, ThemeProvider, createTheme } from "@mui/materia
 import dynamic from "next/dynamic";
 import { useState } from "react";
 
-const LoginPage = dynamic(() => import('@/components/pages/login/LoginPage'), {ssr: false})
-const PasswordListPage = dynamic(() => import('@/components/pages/password/PasswordListPage'), {ssr: false})
+const LoginPage = dynamic(() => import('@/components/pages/login/LoginPage'), { ssr: false })
+const PasswordListPage = dynamic(() => import('@/components/pages/password/PasswordListPage'), { ssr: false })
 
-const customTheme = createTheme({palette: {
+const customTheme = createTheme({
+  palette: {
     mode: 'dark',
     primary: {
       main: '#ffffff',
@@ -34,15 +35,15 @@ function Copyright(props: any) {
 }
 
 export default function Page() {
-  const [ sessionContextData, setSessionContextData ] = useState<SessionContextData>();
+  const [sessionContextData, setSessionContextData] = useState<SessionContextData>();
 
   return (
     <ThemeProvider theme={customTheme}>
-      <Container maxWidth={ false } sx={{ width: '100%', height: '100%', backgroundColor: '#000' }} disableGutters>
-        <CssBaseline/>
+      <Container maxWidth={false} sx={{ width: '100%', height: '100%', backgroundColor: '#000' }} disableGutters>
+        <CssBaseline />
 
-        <SessionContext.Provider value={{ sessionContextData, setSessionContextData }}>  
-          { sessionContextData?.passwordList ? <PasswordListPage /> : <LoginPage /> }
+        <SessionContext.Provider value={{ sessionContextData, setSessionContextData }}>
+          {sessionContextData?.passwordList ? <PasswordListPage /> : <LoginPage />}
         </SessionContext.Provider>
       </Container>
     </ThemeProvider>

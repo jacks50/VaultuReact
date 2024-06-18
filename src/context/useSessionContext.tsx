@@ -3,17 +3,17 @@ import { lib } from "crypto-js";
 import { createContext } from "react";
 
 export interface SessionContextType {
-    sessionContextData?: SessionContextData,
-    setSessionContextData: (session: SessionContextData) => void,
+  sessionContextData?: SessionContextData,
+  setSessionContextData: (session: SessionContextData) => void,
 }
 
 export interface SessionContextData {
-    sessionPassword: string | null,
-    sessionSalt: string | null,
-    sessionIV: lib.WordArray | null,
-    sessionKey: lib.WordArray | null,
-    passwordList: Map<string, PasswordItem> | null,
-    fileName: string | null,
+  sessionPassword: string | null,
+  sessionSalt: string | null,
+  sessionIV: lib.WordArray | null,
+  sessionKey: lib.WordArray | null,
+  passwordList: Map<string, PasswordItem> | null,
+  fileName: string | null,
 }
 
 export const defaultSessionData: SessionContextData = {
@@ -26,6 +26,6 @@ export const defaultSessionData: SessionContextData = {
 }
 
 export const SessionContext = createContext<SessionContextType>({
-    sessionContextData: defaultSessionData,
-    setSessionContextData: (session: SessionContextData) => {},
-  });
+  sessionContextData: defaultSessionData,
+  setSessionContextData: (session: SessionContextData) => { },
+});

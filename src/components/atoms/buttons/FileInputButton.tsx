@@ -25,13 +25,13 @@ export default function FileInputButton({ handleFileUpload, selectedFile }: File
             fullWidth
             size="medium"
             component="label"
-            role={ undefined }
+            role={undefined}
             variant="outlined"
-            tabIndex={ -1 }
-            startIcon={ selectedFile == null ? <CloudUpload/> : null }
-            >
-            { selectedFile == null ? "Select .vault file" : selectedFile.name }
-            <HiddenInputStyle type="file" accept=".vault" onChange={ handleFileUpload }/>
+            tabIndex={-1}
+            startIcon={selectedFile == null ? <CloudUpload /> : null}
+        >
+            {selectedFile == null ? "Select .vault file" : selectedFile.name}
+            <HiddenInputStyle type="file" accept=".vault" onChange={handleFileUpload} />
         </Button>
     );
 }

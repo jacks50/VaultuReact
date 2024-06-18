@@ -3,8 +3,8 @@ import { decryptFile, generateKey, getIV, getSalt } from "@/utils/encryption/enc
 import { useState } from "react";
 
 export function useLogin(): UseLogin {
-    const [ uploadedFile, setUploadedFile ] = useState<File>();
-    const [ uploadedFileContent, setUploadedFileContent ] = useState("");
+    const [uploadedFile, setUploadedFile] = useState<File>();
+    const [uploadedFileContent, setUploadedFileContent] = useState("");
 
     const uploadFile = (fileToUpload: File) => {
         if (fileToUpload == null)

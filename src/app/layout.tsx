@@ -16,9 +16,9 @@ export default function RootLayout({
 }>) {
   return (
     <html style={{ width: 'auto', height: '100%' }}>
-        <body style={{ width: 'auto', height: '100%' }}>
-          {children}
-        </body>
+      <body style={{ width: 'auto', height: '100%' }}>
+        {children}
+      </body>
     </html>
   );
 }

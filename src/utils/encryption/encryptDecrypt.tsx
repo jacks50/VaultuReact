@@ -6,7 +6,7 @@ export const getSalt = (fileContent: string) => {
 }
 
 export const generateSalt = () => {
-   return uuid().replaceAll('-', '').substring(0, 16);
+    return uuid().replaceAll('-', '').substring(0, 16);
 }
 
 export const getIV = (fileContent: string) => {
@@ -19,7 +19,7 @@ export const generateIV = () => {
 
 export const generateKey = (password: string, salt: string) => {
     return PBKDF2(password, salt, {
-        keySize: 256/32,
+        keySize: 256 / 32,
         iterations: 65536,
         hasher: algo.SHA256
     })
