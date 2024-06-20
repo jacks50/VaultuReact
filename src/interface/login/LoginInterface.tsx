@@ -3,6 +3,7 @@ export interface LoginPageProps {
 }
 
 export interface LoginProps {
+    usingLinks: boolean,
     handleNewAccountCreate: () => void,
 }
 

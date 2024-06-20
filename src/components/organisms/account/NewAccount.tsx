@@ -10,8 +10,12 @@ import { encryptFile, generateIV, generateKey, generateSalt } from "@/utils/encr
 import { Box, LinearProgress } from "@mui/material";
 import { useState } from "react";
 
-function NewAccount({ handleNewAccountCancel }: NewAccountProps) {
+function NewAccount({
+    usingLinks,
+    handleNewAccountCancel
+}: NewAccountProps) {
     const [newAccountName, setNewAccountName] = useState("");
+    const [serverUrl, setServerUrl] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirm, setPasswordConfirm] = useState("");
 
@@ -61,10 +65,17 @@ function NewAccount({ handleNewAccountCancel }: NewAccountProps) {
             gap: 2
         }}>
 
-            <TextInputField
-                placeholder="Name of your .vault file"
-                text={newAccountName}
-                setText={setNewAccountName} />
+            {usingLinks ?
+                <TextInputField
+                    placeholder="URL to server"
+                    text={serverUrl}
+                    setText={setServerUrl} />
+                :
+                <TextInputField
+                    placeholder="Name of your .vault file"
+                    text={newAccountName}
+                    setText={setNewAccountName} />
+            }
 
             <PasswordField
                 placeholder="Password"

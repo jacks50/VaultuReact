@@ -1,5 +1,7 @@
 'use client'
 
+import TextInputField from "@/components/atoms/fields/TextInputField";
+import CustomSnackbar from "@/components/atoms/snackbars/CustomSnackbar";
 import { SessionContext } from "@/context/useSessionContext";
 import { useLogin } from "@/hooks/useLogin";
 import { useSnackbar } from "@/hooks/useSnackbar";
@@ -9,14 +11,18 @@ import { ChangeEvent, useContext, useState } from "react";
 import ConfirmButton from "../../atoms/buttons/ConfirmButton";
 import FileInputButton from "../../atoms/buttons/FileInputButton";
 import PasswordField from "../../atoms/fields/PasswordField";
-import CustomSnackbar from "@/components/atoms/snackbars/CustomSnackbar";
 
-function Login({ handleNewAccountCreate }: LoginProps) {
-    const [ isLoading, setLoading ] = useState(false);
-    const [ password, setPassword ] = useState("");
+function Login({
+    usingLinks,
+    handleNewAccountCreate
+}: LoginProps) {
+    const [isLoading, setLoading] = useState(false);
+    const [password, setPassword] = useState("");
+    const [serverUrl, setServerUrl] = useState("");
+    const [serverUsername, setServerUsername] = useState("");
 
-    const { 
-        setSessionContextData 
+    const {
+        setSessionContextData
     } = useContext(SessionContext);
 
     const {
@@ -26,15 +32,21 @@ function Login({ handleNewAccountCreate }: LoginProps) {
     } = useLogin();
 
     const {
-        isOpen, 
-        message, 
+        isOpen,
+        message,
         snackbarType,
-        openSnackbar, 
-        closeSnackbar 
+        openSnackbar,
+        closeSnackbar
     } = useSnackbar();
 
     const handleLogin = () => {
+        if (!uploadedFile) {
+            openSnackbar("Please select a .vault file first", "error");
+            return;
+        }
+
         setLoading(true);
+
         // TODO : still a problem here - high cpu loads that blocks the thread -> maybe a css approach can resolve that
         startLogin(
             password,
@@ -72,45 +84,63 @@ function Login({ handleNewAccountCreate }: LoginProps) {
     }
 
     return (
-        <Box sx={{ 
+        <Box sx={{
             mt: 1,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center', 
+            alignItems: 'center',
             gap: 2,
-            }}>
+        }}>
 
-            <FileInputButton
-                handleFileUpload={ handleFileUpload }
-                selectedFile={ uploadedFile } />
+            {usingLinks ?
+                <>
+                    <TextInputField
+                        placeholder="URL to server"
+                        text={serverUrl}
+                        setText={setServerUrl} />
+
+                    <TextInputField
+                        placeholder="Name of account"
+                        text={serverUsername}
+                        setText={setServerUsername} />
+                </>
+                :
+                <FileInputButton
+                    handleFileUpload={handleFileUpload}
+                    selectedFile={uploadedFile} />
+            }
 
             <PasswordField
                 placeholder="Password"
-                password={ password }
-                setPassword={ setPassword }/>
+                password={password}
+                setPassword={setPassword}
+                onKeyPress={(evt) => {
+                    if (evt.key === 'Enter')
+                        handleLogin();
+                }} />
 
             <ConfirmButton
-                onClick={ handleLogin }
-                disabled={ !(uploadedFile && password) }>
+                onClick={handleLogin}
+                disabled={!(uploadedFile && password)}>
                 Log in
             </ConfirmButton>
 
             <ConfirmButton
-                onClick={ handleNewAccountCreate }
+                onClick={handleNewAccountCreate}
                 color="success">
                 Create new account
             </ConfirmButton>
-        
-            { isLoading && <LinearProgress 
-                color="secondary" 
+
+            {isLoading && <LinearProgress
+                color="secondary"
                 style={{ width: '100%' }}
-                 /> }
+            />}
 
             <CustomSnackbar
-                isOpen={ isOpen }
-                type={ snackbarType }
-                message={ message }
-                closeHandler={ closeSnackbar }/>
+                isOpen={isOpen}
+                type={snackbarType}
+                message={message}
+                closeHandler={closeSnackbar} />
         </Box>
     )
 }

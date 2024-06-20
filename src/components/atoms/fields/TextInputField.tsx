@@ -10,7 +10,7 @@ const TextInputFieldStyle = styled(OutlinedInput)({
 
 });
 
-export default function TextInputFieldField({ text, setText, placeholder }: TextInputFieldProps) {
+export default function TextInputField({ text, setText, placeholder }: TextInputFieldProps) {
     return (
         <TextInputFieldStyle
             placeholder={placeholder}
