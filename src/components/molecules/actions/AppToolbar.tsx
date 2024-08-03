@@ -1,6 +1,6 @@
-import { Logout, MoreVertOutlined, PasswordOutlined, SaveOutlined } from "@mui/icons-material";
-import { AppBar, Box, IconButton, Menu, MenuItem, Toolbar, Typography, styled } from "@mui/material";
-import React from "react";
+import { BugReportOutlined, Logout, MoreVertOutlined, PasswordOutlined, SaveOutlined, StarOutlined } from "@mui/icons-material";
+import { AppBar, Badge, Box, IconButton, Menu, MenuItem, Toolbar, Typography, styled } from "@mui/material";
+import { useState } from "react";
 import AppSearch from "./AppSearch";
 
 interface AppToolbarProps {
@@ -8,6 +8,8 @@ interface AppToolbarProps {
     logoutHandler: () => void,
     searchHandler: (searchTerm: string) => void,
     setOpenGenerator: (isOpen: boolean) => void,
+    debugMode: boolean;
+    setDebugMode: (debugMode: boolean) => void;
 }
 
 const AppToolbarStyle = styled(AppBar)({
@@ -22,8 +24,10 @@ export default function AppToolbar({
     logoutHandler,
     searchHandler,
     setOpenGenerator,
+    debugMode,
+    setDebugMode,
 }: AppToolbarProps) {
-    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState<null | HTMLElement>(null);
 
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -33,6 +37,10 @@ export default function AppToolbar({
 
     const handleMobileMenuClose = () => {
         setMobileMoreAnchorEl(null);
+    }
+
+    const handleDebugModeEnabled = () => {
+        setDebugMode(true);
     }
 
     const renderMenu = (
@@ -50,6 +58,16 @@ export default function AppToolbar({
                 aria-label="generate password"
                 onClick={() => setOpenGenerator(true)} >
                 <PasswordOutlined />
+            </IconButton>
+
+            <IconButton
+                size="large"
+                color="inherit"
+                aria-label="debug-mode"
+                onClick={() => setDebugMode(!debugMode)}>
+                <Badge color="success" variant="dot" invisible={ !debugMode }>
+                    <BugReportOutlined />
+                </Badge>
             </IconButton>
 
             <IconButton

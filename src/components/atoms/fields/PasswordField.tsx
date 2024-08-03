@@ -1,11 +1,11 @@
+import DefaultFieldProps from "@/interface/field/FieldInterface";
 import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
 import { IconButton, InputAdornment, OutlinedInput, styled } from "@mui/material";
 import { useState, KeyboardEvent } from "react";
 
-interface PasswordFieldProps {
+interface PasswordFieldProps extends DefaultFieldProps {
     placeholder: string,
     password: string,
-    setPassword: (value: string) => void,
     onKeyPress?: (evt: KeyboardEvent<HTMLInputElement>) => void,
 }
 
@@ -13,16 +13,23 @@ const PasswordFieldStyle = styled(OutlinedInput)({
 
 });
 
-export default function PasswordField({ placeholder, password, setPassword, onKeyPress }: PasswordFieldProps) {
+export default function PasswordField({ 
+    id, 
+    onChange, 
+    placeholder, 
+    password, 
+    onKeyPress 
+}: PasswordFieldProps) {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
         <PasswordFieldStyle
-            placeholder={placeholder}
-            type={showPassword ? "text" : "password"}
-            value={password}
+            id={ id }
+            placeholder={ placeholder }
+            type={ showPassword ? "text" : "password" }
+            value={ password }
             sx={{ width: "100%", color: 'white', '&.Mui-focused': { color: 'white' } }}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={ onChange }
             size="small"
             onKeyDown={ onKeyPress }
             endAdornment={

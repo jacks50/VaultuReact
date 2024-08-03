@@ -1,8 +1,9 @@
+import DefaultFieldProps from "@/interface/field/FieldInterface";
 import { OutlinedInput, styled } from "@mui/material";
 
-interface TextInputFieldProps {
-    text: string,
-    setText: (value: string) => void,
+interface TextInputFieldProps extends DefaultFieldProps {
+    type: "text" | "number",
+    text: string | number,
     placeholder: string,
 }
 
@@ -10,14 +11,21 @@ const TextInputFieldStyle = styled(OutlinedInput)({
 
 });
 
-export default function TextInputField({ text, setText, placeholder }: TextInputFieldProps) {
+export default function TextInputField({ 
+    id, 
+    onChange, 
+    type, 
+    text,
+    placeholder 
+}: TextInputFieldProps) {
     return (
         <TextInputFieldStyle
+            id={ id }
             placeholder={placeholder}
-            type={"text"}
+            type={type}
             value={text}
             fullWidth
-            onChange={(e) => setText(e.target.value)}
+            onChange={ onChange }
             size="small"
         />
     )
