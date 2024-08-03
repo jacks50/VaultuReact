@@ -27,7 +27,7 @@ function PasswordList({ }: PasswordListProps) {
     const biggestID: number = useMemo(() => {
         return Array.from(sessionContextData?.passwordList?.entries()!!)
                 .reduce((a, b) => a[1].passwordId < b[1].passwordId ? b : a)[1].passwordId + 1;
-    }, [sessionContextData]);
+    }, [sessionContextData?.passwordList]);
 
     const {
         isOpen,
@@ -74,7 +74,7 @@ function PasswordList({ }: PasswordListProps) {
         });
     }
 
-    const getPasswordCards = () => {
+    const passwordCards = useMemo(() => {
         const passwordItems: JSX.Element[] = [];
 
         sessionContextData?.passwordList?.forEach((passwordItem, passwordUID) => {
@@ -91,7 +91,7 @@ function PasswordList({ }: PasswordListProps) {
         });
 
         return passwordItems;
-    }
+    }, [sessionContextData?.passwordList, search]);
 
     const handleListSave = () => {
         if (sessionContextData != null) {
@@ -153,7 +153,7 @@ function PasswordList({ }: PasswordListProps) {
                         padding={{ xs: 2, md: 4 }}
                         rowSpacing={{ xs: 3, md: 2 }}
                         columnSpacing={{ xs: 0, md: 2 }}>
-                        {getPasswordCards()}
+                        { passwordCards }
                     </Grid>
             }
 
