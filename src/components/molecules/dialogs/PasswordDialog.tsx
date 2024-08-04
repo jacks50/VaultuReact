@@ -1,66 +1,40 @@
 import PasswordField from "@/components/atoms/fields/PasswordField";
 import TextInputField from "@/components/atoms/fields/TextInputField";
 import { PasswordDialogInterface } from "@/interface/dialog/DialogInterface";
+import { PasswordItem } from "@/interface/password/PasswordInterface";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
+
+type PasswordDialogData = PasswordItem
 
 export function PasswordDialog({
     item,
     open,
     close,
-    onSave
+    onSave,
+    debugMode,
 }: PasswordDialogInterface) {
-    const [name, setName] = useState(item.passwordName);
-    const [username, setUsername] = useState(item.passwordUsername);
-    const [password, setPassword] = useState(item.passwordValue);
-    const [url, setUrl] = useState(item.passwordURL);
+    const [ passwordData, setPasswordData ] = useState<PasswordDialogData>(item);
 
     useEffect(() => {
-        setName(item.passwordName);
-        setUsername(item.passwordUsername);
-        setPassword(item.passwordValue);
-        setUrl(item.passwordURL);
+        setPasswordData(item);
     }, [item])
 
     const handleSave = () => {
         onSave({
-            ...item,
-            passwordName: name,
-            passwordUsername: username,
-            passwordValue: password,
-            passwordURL: url,
-        })
+            ...passwordData
+        });
+
         close();
     }
 
-    const handleCancel = () => {
-        setName(item.passwordName);
-        setUsername(item.passwordUsername);
-        setPassword(item.passwordValue);
-        setUrl(item.passwordURL);
-        close();
-    }
+    const handleFieldChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const { id, value } = event.target
 
-    const handleFieldChange = (type: string, value: string) => {
-        switch (type) {
-            case "name": {
-                setName(value);
-                break;
-            }
-            case "username": {
-                setUsername(value);
-                break;
-            }
-            case "password": {
-                setPassword(value);
-                break;
-            }
-            case "url": {
-                setUrl(value);
-                break;
-            }
-            default: { }
-        }
+        setPasswordData({
+            ...passwordData,
+            [id]: ["passwordId", "loginId"].includes(id) ? parseInt(value) : value,
+        } as PasswordDialogData)
     }
 
     return (
@@ -79,31 +53,63 @@ export function PasswordDialog({
                     justifyContent: 'center',
                     gap: 2,
                 }}>
+                    { debugMode && (
+                    <>
+                        <TextInputField
+                            id="loginId"
+                            type="number"
+                            text={passwordData.loginId}
+                            placeholder="Login ID"
+                            onChange={ handleFieldChange } />
+
+                        <TextInputField
+                            id="passwordId"
+                            type="number"
+                            text={passwordData.passwordId}
+                            placeholder="Password ID"
+                            onChange={ handleFieldChange } />
+
+                        <TextInputField
+                            id="passwordUID"
+                            type="text"
+                            text={passwordData.passwordUID}
+                            placeholder="Password UID"
+                            onChange={ handleFieldChange } />
+                    </>
+                    )}
+
                     <TextInputField
-                        text={name}
+                        id="passwordName"
+                        type="text"
+                        text={passwordData.passwordName}
                         placeholder="Name"
-                        setText={(value) => handleFieldChange("name", value)} />
+                        onChange={ handleFieldChange } />
 
                     <TextInputField
-                        text={url}
+                        id="passwordURL"
+                        type="text"
+                        text={passwordData.passwordURL}
                         placeholder="URL"
-                        setText={(value) => handleFieldChange("url", value)} />
+                        onChange={ handleFieldChange } />
 
                     <TextInputField
-                        text={username}
+                        id="passwordUsername"
+                        type="text"
+                        text={passwordData.passwordUsername}
                         placeholder="Username"
-                        setText={(value) => handleFieldChange("username", value)} />
+                        onChange={ handleFieldChange } />
 
                     <PasswordField
+                        id="passwordValue"
                         placeholder="Password"
-                        password={password}
-                        setPassword={(value) => handleFieldChange("password", value)} />
+                        password={passwordData.passwordValue}
+                        onChange={ handleFieldChange } />
                 </Box>
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={handleSave}>Save</Button>
-                <Button onClick={handleCancel}>Cancel</Button>
+                <Button onClick={ handleSave }>Save</Button>
+                <Button onClick={ close }>Cancel</Button>
             </DialogActions>
         </Dialog>
     );

@@ -12,6 +12,7 @@ export interface PasswordDialogInterface {
     open: boolean,
     close: () => void,
     onSave: (item: PasswordItem) => void,
+    debugMode: boolean,
 }
 
 export interface UseConfirmDialog {

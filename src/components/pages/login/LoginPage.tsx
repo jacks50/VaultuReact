@@ -43,6 +43,8 @@ function LoginPage(props: LoginPageProps) {
                         handleNewAccountCreate={() => setCreatingNewAccount(true)} />
             }
 
+            {/*
+            -- v2.0 --
             <FormControlLabel
                 value="use_links"
                 label="Use links instead of files"
@@ -53,6 +55,7 @@ function LoginPage(props: LoginPageProps) {
                         color="error" />
                 }
                 labelPlacement="top" />
+            */}
         </Box>
     );
 }

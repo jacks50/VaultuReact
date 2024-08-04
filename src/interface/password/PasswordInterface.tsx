@@ -13,7 +13,7 @@ export interface PasswordCardInterface {
 }
 
 export interface PasswordItem {
-    passwordID: number,
+    passwordId: number,
     passwordName: string,
     passwordUsername: string,
     passwordURL: string,
@@ -22,22 +22,12 @@ export interface PasswordItem {
     passwordUID: string,
 }
 
-export const noPasswordItem: PasswordItem = {
-    passwordID: -1,
-    passwordName: "x",
-    passwordUsername: "x",
-    passwordURL: "x",
-    passwordValue: "x",
-    loginId: -1,
-    passwordUID: "x"
-}
-
 export const defaultNewPasswordItem: PasswordItem = {
-    passwordID: 0,
+    passwordId: 0,
     passwordName: "",
     passwordUsername: "",
     passwordURL: "",
     passwordValue: "",
-    loginId: 0,
+    loginId: 1,
     passwordUID: ""
 }

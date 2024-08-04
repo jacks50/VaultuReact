@@ -95,14 +95,16 @@ function Login({
             {usingLinks ?
                 <>
                     <TextInputField
+                        type="text"
                         placeholder="URL to server"
                         text={serverUrl}
-                        setText={setServerUrl} />
+                        onChange={(e) => setServerUrl(e.target.value)} />
 
                     <TextInputField
+                        type="text"
                         placeholder="Name of account"
                         text={serverUsername}
-                        setText={setServerUsername} />
+                        onChange={(e) => setServerUsername(e.target.value)} />
                 </>
                 :
                 <FileInputButton
@@ -113,7 +115,7 @@ function Login({
             <PasswordField
                 placeholder="Password"
                 password={password}
-                setPassword={setPassword}
+                onChange={ (e) => setPassword(e.target.value) }
                 onKeyPress={(evt) => {
                     if (evt.key === 'Enter')
                         handleLogin();

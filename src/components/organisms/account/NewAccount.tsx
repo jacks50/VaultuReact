@@ -67,25 +67,27 @@ function NewAccount({
 
             {usingLinks ?
                 <TextInputField
+                    type="text"
                     placeholder="URL to server"
                     text={serverUrl}
-                    setText={setServerUrl} />
+                    onChange={ (e) => setServerUrl(e.target.value) } />
                 :
                 <TextInputField
+                    type="text"
                     placeholder="Name of your .vault file"
                     text={newAccountName}
-                    setText={setNewAccountName} />
+                    onChange={ (e) => setNewAccountName(e.target.value) } />
             }
 
             <PasswordField
                 placeholder="Password"
                 password={password}
-                setPassword={setPassword} />
+                onChange={ (e) => setPassword(e.target.value) } />
 
             <PasswordField
                 placeholder="Confirm password"
                 password={passwordConfirm}
-                setPassword={setPasswordConfirm} />
+                onChange={ (e) => setPasswordConfirm(e.target.value) } />
 
             <ConfirmButton
                 onClick={handleFileCreate}
