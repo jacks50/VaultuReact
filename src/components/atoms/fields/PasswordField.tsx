@@ -1,37 +1,23 @@
-import DefaultFieldProps from "@/interface/field/FieldInterface";
-import { VisibilityOffOutlined, VisibilityOutlined } from "@mui/icons-material";
-import { IconButton, InputAdornment, OutlinedInput, styled } from "@mui/material";
-import { useState, KeyboardEvent } from "react";
+import { VisibilityOutlined, VisibilityOffOutlined } from "@mui/icons-material";
+import { IconButton, InputAdornment, OutlinedInput, OutlinedInputProps } from "@mui/material";
+import { useState } from "react";
 
-interface PasswordFieldProps extends DefaultFieldProps {
-    placeholder: string,
-    password: string,
-    onKeyPress?: (evt: KeyboardEvent<HTMLInputElement>) => void,
+interface IOutlinedInputProps extends OutlinedInputProps {
+
 }
 
-const PasswordFieldStyle = styled(OutlinedInput)({
-
-});
-
-export default function PasswordField({ 
-    id, 
-    onChange, 
-    placeholder, 
-    password, 
-    onKeyPress 
-}: PasswordFieldProps) {
+export default function PasswordField({
+    fullWidth, 
+    size="small", 
+    ...props}: IOutlinedInputProps
+) {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
-        <PasswordFieldStyle
-            id={ id }
-            placeholder={ placeholder }
+        <OutlinedInput
             type={ showPassword ? "text" : "password" }
-            value={ password }
             sx={{ width: "100%", color: 'white', '&.Mui-focused': { color: 'white' } }}
-            onChange={ onChange }
-            size="small"
-            onKeyDown={ onKeyPress }
+            size={ size }
             endAdornment={
                 <InputAdornment position="end">
                     <IconButton
@@ -41,6 +27,7 @@ export default function PasswordField({
                     </IconButton>
                 </InputAdornment>
             }
+            { ...props }
         />
     )
 }

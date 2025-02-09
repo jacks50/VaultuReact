@@ -2,35 +2,35 @@
 
 import TextInputField from "@/components/atoms/fields/TextInputField";
 import CustomSnackbar from "@/components/atoms/snackbars/CustomSnackbar";
-import { SessionContext } from "@/context/useSessionContext";
 import { useLogin } from "@/hooks/useLogin";
 import { useSnackbar } from "@/hooks/useSnackbar";
 import { CryptLoginData, LoginProps } from "@/interface/login/LoginInterface";
 import { Box, LinearProgress } from "@mui/material";
-import { ChangeEvent, useContext, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import ConfirmButton from "../../atoms/buttons/ConfirmButton";
 import FileInputButton from "../../atoms/buttons/FileInputButton";
 import PasswordField from "../../atoms/fields/PasswordField";
+import { VAULTER_ACCOUNT_NAME_KEY_REQ, VAULTER_LOGIN_URL, VAULTER_OTP_CODE_KEY } from "@/utils/constants/constants";
+import { useSession } from "@/context/AppContext";
 
 function Login({
-    usingLinks,
     handleNewAccountCreate
 }: LoginProps) {
     const [isLoading, setLoading] = useState(false);
     const [password, setPassword] = useState("");
+    const [otpCode, setOtpCode] = useState("");
     const [serverUrl, setServerUrl] = useState("");
     const [serverUsername, setServerUsername] = useState("");
+    const [selectedFile, setSelectedFile] = useState<File>();
+
+    const session = useSession();
 
     const {
-        setSessionContextData
-    } = useContext(SessionContext);
-
-    const {
-        uploadFile,
-        uploadedFile,
-        startLogin,
+        handleLocalLogin,
+        handleServerLogin,
     } = useLogin();
 
+    // todo : make it createPortal
     const {
         isOpen,
         message,
@@ -39,91 +39,67 @@ function Login({
         closeSnackbar
     } = useSnackbar();
 
-    const handleLogin = () => {
-        if (!uploadedFile) {
-            openSnackbar("Please select a .vault file first", "error");
-            return;
-        }
-
-        setLoading(true);
-
-        // TODO : still a problem here - high cpu loads that blocks the thread -> maybe a css approach can resolve that
-        startLogin(
-            password,
-            (result: CryptLoginData) => {
-                setLoading(false);
-
-                let jsonMap = JSON.parse(result.decryptedContent);
-
-                setSessionContextData({
-                    sessionPassword: password,
-                    sessionSalt: result.salt,
-                    sessionIV: result.iv,
-                    sessionKey: result.key,
-                    passwordList: new Map(Object.entries(jsonMap)),
-                    fileName: uploadedFile && uploadedFile.name || null,
-                });
-            },
-            (err: any) => {
-                setLoading(false);
-                openSnackbar("Incorrect login / password", "error");
-                console.error(err);
-            }
-        );
-    }
-
-    const handleFileUpload = (e: ChangeEvent<HTMLInputElement>) => {
-        if (!e.target.files) {
-            openSnackbar("Please select a valid file to be uploaded", "error");
-            return;
-        }
-
-        const file = e.target.files[0];
-
-        uploadFile(file);
-    }
-
     return (
         <Box sx={{
-            mt: 1,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             gap: 2,
         }}>
 
-            {usingLinks ?
+            { session.useVaulter ?
                 <>
                     <TextInputField
                         type="text"
                         placeholder="URL to server"
-                        text={serverUrl}
+                        value={serverUrl}
                         onChange={(e) => setServerUrl(e.target.value)} />
 
                     <TextInputField
                         type="text"
                         placeholder="Name of account"
-                        text={serverUsername}
+                        value={serverUsername}
                         onChange={(e) => setServerUsername(e.target.value)} />
+
+                    <PasswordField
+                        placeholder="Password"
+                        value={password}
+                        onChange={ (e) => setPassword(e.target.value) }
+                        onKeyUp={(evt) => {
+                            if (evt.key === 'Enter')
+                                handleServerLogin(serverUrl, serverUsername, password, otpCode);
+                        }} />
+
+                    <PasswordField
+                        placeholder="2FA code"
+                        value={otpCode}
+                        onChange={ (e) => setOtpCode(e.target.value) }
+                        onKeyUp={(evt) => {
+                            if (evt.key === 'Enter')
+                                handleServerLogin(serverUrl, serverUsername, password, otpCode);
+                        }} />
                 </>
                 :
-                <FileInputButton
-                    handleFileUpload={handleFileUpload}
-                    selectedFile={uploadedFile} />
-            }
+                <>
+                    <FileInputButton
+                        handleFileUpload={ (fileToUpload) => setSelectedFile(fileToUpload) }
+                        selectedFile={ selectedFile } />
 
-            <PasswordField
-                placeholder="Password"
-                password={password}
-                onChange={ (e) => setPassword(e.target.value) }
-                onKeyPress={(evt) => {
-                    if (evt.key === 'Enter')
-                        handleLogin();
-                }} />
+                    <PasswordField
+                        placeholder="Password"
+                        value={password}
+                        onChange={ (e) => setPassword(e.target.value) }
+                        onKeyUp={(evt) => {
+                            if (evt.key === 'Enter')
+                                handleLocalLogin(selectedFile!, password);
+                        }} />                    
+                </>}
 
             <ConfirmButton
-                onClick={handleLogin}
-                disabled={!(uploadedFile && password)}>
+                onClick={ () => {
+                    session.useVaulter ? 
+                        handleServerLogin(serverUrl, serverUsername, password, otpCode) 
+                        : handleLocalLogin(selectedFile!, password)} }>
                 Log in
             </ConfirmButton>
 

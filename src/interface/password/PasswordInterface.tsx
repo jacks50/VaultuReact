@@ -8,7 +8,7 @@ export interface PasswordListProps {
 
 export interface PasswordCardInterface {
     handleItemOpen: (item: PasswordItem) => void,
-    handleItemDelete: (itemUID: string) => void, 
+    handleItemDelete: (item: PasswordItem) => void, 
     item: PasswordItem
 }
 

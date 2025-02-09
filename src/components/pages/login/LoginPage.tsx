@@ -1,15 +1,18 @@
 import NewAccount from "@/components/organisms/account/NewAccount";
 import Login from "@/components/organisms/login/Login";
+import { SessionContext, SessionDispatchContext, useSession, useSessionDispatch } from "@/context/AppContext";
+import { SESSION_SAVE } from "@/interface/context/ContextActions";
 import { LoginPageProps } from "@/interface/login/LoginInterface";
-import { SafetyCheckRounded } from "@mui/icons-material";
-import { Box, FormControlLabel, Switch, Typography } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, Typography } from "@mui/material";
 import Image from "next/image";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 
 function LoginPage(props: LoginPageProps) {
-    const [ creatingNewAccount, setCreatingNewAccount ] = useState(false);
-    const [ useLinks, setUseLinks ] = useState(false);
+    const [creatingNewAccount, setCreatingNewAccount] = useState(false);
+    
+    const currentSession = useSession();
+    const sessionDispatch = useSessionDispatch();
 
     return (
         <Box sx={{
@@ -17,7 +20,6 @@ function LoginPage(props: LoginPageProps) {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: 4,
             flexGrow: 1,
             height: '100%',
         }}>
@@ -28,34 +30,34 @@ function LoginPage(props: LoginPageProps) {
                 height={140} />
 
             <Typography
-                variant="h1">
+                variant="h1"
+                sx={{ mt: 2, mb: 2, }}>
                 VaultuReact
             </Typography>
-
-            {
-                creatingNewAccount ?
-                    <NewAccount 
-                        usingLinks={ useLinks } 
-                        handleNewAccountCancel={() => setCreatingNewAccount(false)} /> 
-                    :
-                    <Login 
-                        usingLinks={ useLinks } 
-                        handleNewAccountCreate={() => setCreatingNewAccount(true)} />
-            }
-
-            {/*
-            -- v2.0 --
+            
             <FormControlLabel
                 value="use_links"
-                label="Use links instead of files"
+                label="Use a Vaulter instance URL"
+                labelPlacement="start"
                 control={
-                    <Switch 
-                        checked={ useLinks }
-                        onChange={ (e) => { setUseLinks(e.target.checked) } }
+                    <Checkbox 
+                        checked={ currentSession?.useVaulter }
+                        onChange={ (e) => { 
+                            sessionDispatch?.({
+                                type: SESSION_SAVE,
+                                data: { 
+                                    ...currentSession,
+                                    useVaulter: e.target.checked,
+                                }
+                            })
+                        } }
                         color="error" />
-                }
-                labelPlacement="top" />
-            */}
+                } />
+
+            { creatingNewAccount ? 
+            <NewAccount handleNewAccountCancel={ () => setCreatingNewAccount(false) }/> 
+            : 
+            <Login handleNewAccountCreate={ () => setCreatingNewAccount(true) }/>}
         </Box>
     );
 }

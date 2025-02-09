@@ -1,14 +1,15 @@
+import { ChangeEvent } from "react";
+
 export interface LoginPageProps {
     
 }
 
 export interface LoginProps {
-    usingLinks: boolean,
     handleNewAccountCreate: () => void,
 }
 
 export interface UseLogin {
-    uploadFile: (fileToUpload: File) => void,
+    uploadFile: (fileToUpload: File | undefined, onError: (error?: any) => void, onSuccess?: (result?: any) => void) => void,
     uploadedFile?: File,
     startLogin: (password: string, successHandler: (result: CryptLoginData) => void, errorHandler: (err: string) => void) => void,
 }

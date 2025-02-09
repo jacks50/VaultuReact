@@ -1,3 +1,4 @@
+import { PasswordItem } from "@/interface/password/PasswordInterface";
 import { AES, PBKDF2, algo, enc, lib, mode, pad } from "crypto-js";
 import { v4 as uuid } from "uuid";
 
@@ -50,4 +51,31 @@ export const encryptFile = async (fileContent: string, key: lib.WordArray, iv: l
     });
 
     return salt + iv.toString(enc.Utf8) + encrypted
+}
+
+export const createEncryptedFile = (
+    password: string, 
+    passwordConfirm: string,
+    onError: (error?: any) => void,
+    onSuccess: (result?: any) => void,
+) => {
+    if (password !== passwordConfirm) {
+        onError("Passwords are not matching");
+        return;
+    }
+
+    const newSalt = generateSalt();
+    const newIV = generateIV();
+    const newKey = generateKey(password, newSalt);
+
+    encryptFile(
+        JSON.stringify(new Map<string, PasswordItem>()),
+        newKey,
+        newIV,
+        newSalt
+    ).then((result) => {
+        onSuccess(result);
+    }).catch((error) => {
+        onError(error);
+    });
 }

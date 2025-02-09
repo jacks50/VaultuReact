@@ -1,32 +1,20 @@
-import DefaultFieldProps from "@/interface/field/FieldInterface";
-import { OutlinedInput, styled } from "@mui/material";
+import { OutlinedInput, OutlinedInputProps } from "@mui/material";
 
-interface TextInputFieldProps extends DefaultFieldProps {
-    type: "text" | "number",
-    text: string | number,
-    placeholder: string,
+interface IOutlinedInputProps extends OutlinedInputProps {
+
 }
 
-const TextInputFieldStyle = styled(OutlinedInput)({
-
-});
-
-export default function TextInputField({ 
-    id, 
-    onChange, 
-    type, 
-    text,
-    placeholder 
-}: TextInputFieldProps) {
+export default function TextInputField({
+    type="text", 
+    fullWidth, 
+    size="small", 
+    ...props}: IOutlinedInputProps
+) {
     return (
-        <TextInputFieldStyle
-            id={ id }
-            placeholder={placeholder}
+        <OutlinedInput 
             type={type}
-            value={text}
             fullWidth
-            onChange={ onChange }
-            size="small"
-        />
+            size={size}
+            {...props}/>
     )
 }

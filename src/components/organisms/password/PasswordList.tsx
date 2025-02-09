@@ -1,7 +1,6 @@
 import CustomSnackbar from "@/components/atoms/snackbars/CustomSnackbar";
 import AppToolbar, { Offset } from "@/components/molecules/actions/AppToolbar";
 import { ConfirmationDialog } from "@/components/molecules/dialogs/ConfirmationDialog";
-import { SessionContext, defaultSessionData } from "@/context/useSessionContext";
 import { useConfirmDialog } from "@/hooks/useConfirmDialog";
 import { useSnackbar } from "@/hooks/useSnackbar";
 import { PasswordItem, PasswordListProps, defaultNewPasswordItem } from "@/interface/password/PasswordInterface";
@@ -14,6 +13,9 @@ import { PasswordDialog } from "../../molecules/dialogs/PasswordDialog";
 import { PasswordCard } from "../../molecules/passwords/PasswordCard";
 import PasswordGenerator from "./PasswordGenerator";
 import { v4 as uuid } from "uuid";
+import { useSession } from "@/context/AppContext";
+import { usePasswords, usePasswordsDispatch } from "@/context/PasswordContext";
+import { DELETE_PASSWORD, EDIT_PASSWORD } from "@/interface/context/ContextActions";
 
 function PasswordList({ }: PasswordListProps) {
     const [search, setSearch] = useState("");
@@ -21,13 +23,17 @@ function PasswordList({ }: PasswordListProps) {
     const [selectedPassword, setSelectedPassword] = useState<PasswordItem>({} as PasswordItem);
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [debugMode, setDebugMode] = useState(false);
-
-    const { sessionContextData, setSessionContextData } = useContext(SessionContext);
+    
+    const passwords = usePasswords();
+    const passwordsDispatch = usePasswordsDispatch();
 
     const biggestID: number = useMemo(() => {
-        return Array.from(sessionContextData?.passwordList?.entries()!!)
-                .reduce((a, b) => a[1].passwordId < b[1].passwordId ? b : a)[1].passwordId + 1;
-    }, [sessionContextData?.passwordList]);
+        if (!passwords)
+            return 1;
+        
+        return Array.from(passwords.entries()!!)
+                .reduce((a, b) => a[1].passwordId < b[1].passwordId ? b : a, ['', defaultNewPasswordItem])[1].passwordId + 1;
+    }, [passwords]);
 
     const {
         isOpen,
@@ -48,28 +54,23 @@ function PasswordList({ }: PasswordListProps) {
     }
 
     const handleItemSave = (itemValues: PasswordItem) => {
-        const newMap = new Map(sessionContextData?.passwordList);
-        newMap.set(itemValues.passwordUID, itemValues);
-
-        setSessionContextData({
-            ...sessionContextData!,
-            passwordList: newMap
+        passwordsDispatch({
+            type: EDIT_PASSWORD,
+            item: itemValues,
         });
     }
 
-    const handleItemDelete = (itemUID: string) => {
+    const handleItemDelete = (itemValues: PasswordItem) => {
         setDialogData({
-            value: itemUID,
+            value: itemValues,
             title: "Delete password",
             message: "Are you sure you want to delete this password ?",
-            callback: (itemToDelete: string) => {
-                const newMap = new Map(sessionContextData?.passwordList);
-                newMap.delete(itemToDelete);
-
-                setSessionContextData({
-                    ...sessionContextData!,
-                    passwordList: newMap
+            callback: () => {
+                passwordsDispatch({
+                    type: DELETE_PASSWORD,
+                    item: itemValues,
                 });
+                
             }
         });
     }
@@ -77,7 +78,7 @@ function PasswordList({ }: PasswordListProps) {
     const passwordCards = useMemo(() => {
         const passwordItems: JSX.Element[] = [];
 
-        sessionContextData?.passwordList?.forEach((passwordItem, passwordUID) => {
+        passwords.forEach((passwordItem, passwordUID) => {
             if (!search ||
                 passwordItem.passwordName.toLowerCase().includes(search.toLowerCase()) ||
                 passwordItem.passwordURL.toLowerCase().includes(search.toLowerCase()))
@@ -91,17 +92,17 @@ function PasswordList({ }: PasswordListProps) {
         });
 
         return passwordItems;
-    }, [sessionContextData?.passwordList, search]);
+    }, [passwords, search]);
 
     const handleListSave = () => {
-        if (sessionContextData != null) {
+        if (session != null) {
             encryptFile(
-                JSON.stringify(Object.fromEntries(sessionContextData?.passwordList!!)),
-                sessionContextData.sessionKey!,
-                sessionContextData.sessionIV!,
-                sessionContextData.sessionSalt!)
+                JSON.stringify(Object.fromEntries(passwords!!)),
+                session.sessionKey!,
+                session.sessionIV!,
+                session.sessionSalt!)
                 .then((result) => {
-                    openSnackbar(sessionContextData.fileName!, "download", FILE_DOWNLOAD + encodeURIComponent(result));
+                    openSnackbar(session.fileName!, "download", FILE_DOWNLOAD + encodeURIComponent(result));
                 })
                 .catch((error) => {
                     openSnackbar("An error occured while trying to save the new file", "error");
@@ -141,7 +142,7 @@ function PasswordList({ }: PasswordListProps) {
             <Offset />
 
             {
-                sessionContextData?.passwordList?.size == 0 ?
+                passwords.size == 0 ?
                     <Typography
                         variant="h5"
                         align="center">
